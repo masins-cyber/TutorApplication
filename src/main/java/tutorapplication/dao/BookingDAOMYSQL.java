@@ -1,0 +1,147 @@
+package tutorapplication.dao;
+
+import tutorapplication.exception.LessonAlreadyBookedException;
+import tutorapplication.model.Booking;
+import tutorapplication.others.Connect;
+
+import java.sql.*;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+public class BookingDAOMYSQL implements BookingDAO {
+
+    private static final Logger logger = Logger.getLogger(BookingDAOMYSQL.class.getName());
+
+    @Override
+    public int saveBooking(Booking booking) throws LessonAlreadyBookedException {
+        String checkQuery = "SELECT available FROM lessons WHERE id = ?";
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+            checkStmt.setInt(1, booking.getId());
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    boolean isAvailable = rs.getBoolean("available");
+                    if (!isAvailable) {
+                        throw new LessonAlreadyBookedException(booking.getId());
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error during lesson availability pre-check for booking ID: " + booking.getId(), e);
+            return -1;
+        }
+
+        String query = "INSERT INTO bookings (lesson_id, student_email, status) VALUES (?, ?, ?)";
+
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, booking.getId());
+            stmt.setString(2, booking.getStudentEmail());
+            stmt.setString(3, booking.getStatus());
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error while persisting new booking record", e);
+        }
+        return -1;
+    }
+
+    @Override
+    public List<Booking> findPendingBookingsByTutor(String tutorEmail) {
+
+        List<Booking> pendingBookings = new java.util.ArrayList<>();
+        String query = "SELECT b.booking_id, b.lesson_id, b.student_email, b.status " + "FROM bookings b JOIN lessons l ON b.lesson_id = l.id " + "WHERE l.tutor_email = ? AND b.status = 'booked'";
+
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, tutorEmail);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while(rs.next()) {
+                    Booking booking = new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                    pendingBookings.add(booking);
+                }
+            }
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error while retrieving pending bookings for tutor: " + tutorEmail, e);
+        }
+        return pendingBookings;
+    }
+
+    @Override
+    public boolean updateBookingStatus(int bookingId, String newStatus) {
+        String query = "UPDATE bookings SET status = ? WHERE booking_id = ?";
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, bookingId);
+            return stmt.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error while updating status for booking ID: " + bookingId, e);
+            return false;
+        }
+    }
+
+
+    @Override
+    public List<Booking> findAllBookingsByStudent(String studentEmail) {
+        List<Booking> bookings = new java.util.ArrayList<>();
+        String query = "SELECT booking_id, lesson_id, student_email, status FROM bookings WHERE student_email = ?";
+
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, studentEmail);
+            try(ResultSet rs = stmt.executeQuery()) {
+                while(rs.next()) {
+                    Booking booking = new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                    bookings.add(booking);
+                }
+            }
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error while fetching all bookings for student: " + studentEmail, e);
+        }
+        return bookings;
+    }
+
+    @Override
+    public boolean deleteBooking(int bookingId) {
+        String query = "DELETE FROM bookings WHERE booking_id = ?";
+
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, bookingId);
+
+            return stmt.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error while deleting booking record with ID: " + bookingId, e);
+            return false;
+        }
+    }
+
+    @Override
+    public Booking findBookingById(int bookingId) {
+        String query = "SELECT booking_id, lesson_id, student_email, status FROM bookings WHERE booking_id = ?";
+
+        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, bookingId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                }
+            }
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Database error during single booking lookup for ID: " + bookingId, e);
+        }
+        return null;
+    }
+}

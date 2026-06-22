@@ -1,0 +1,4 @@
+[
+{"email":"maso20@gmail.com","password":"$2a$10$Cjlk3rD5voyIJpdtmewiaeb4EL5haoHuQvi7mCcIhqXVEfzyo1zN2","name":"Matteo","surname":"Masini","role":"STUDENT","student_id":"0310935"},
+{"email":"simix@gmail.com","password":"$2a$10$Iwj5CQJzE5TZCFyvK8idB.c913ACZyZOORzJzPV/gixVLuBA19Qgm","name":"Simone","surname":"Piras","role":"TUTOR","student_id":""}
+]

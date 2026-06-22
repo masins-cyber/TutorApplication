@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Hyperlink?>
+<AnchorPane prefHeight="550.0" prefWidth="850.0" style="-fx-background-color: #64DFDF;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.Gui.LessonResultsGui">
+    <HBox layoutX="20.0" layoutY="25.0" prefHeight="500.0" prefWidth="810.0" spacing="20.0">
+        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="240.0" spacing="25.0" style="-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 10px; -fx-padding: 20px;">
+
+            <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../images/results.png"/>
+            </ImageView>
+
+            <VBox alignment="CENTER" spacing="8.0">
+                <Label alignment="CENTER" text="Available&#10;Lessons Found" textAlignment="CENTER" style="-fx-font-weight: bold; -fx-font-family: 'System'; -fx-font-size: 22px; -fx-text-fill: blue;"/>
+                <Label alignment="CENTER" text="Here are the available&#10;slots based on filters" textAlignment="CENTER" style="-fx-font-size: 12px; -fx-text-fill: blue;"/>
+            </VBox>
+
+            <Button fx:id="bookLessonButton" onAction="#bookLesson" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #1D4ED8; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5px;" text="Confirm Booking" visible="false" managed="false"/>
+            <Button fx:id="backToSearchButton" onAction="#backToSearch" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5px;" text="Back to Search">
+                <VBox.margin>
+                    <Insets top="30.0"/>
+                </VBox.margin>
+            </Button>
+            <Hyperlink fx:id="backToHomeLink" onAction="#backToHome" text="Go back to student homepage" style="-fx-text-fill: #0000FF; -fx-underline: true; -fx-font-size: 14px; -fx-cursor: hand;"/>
+        </VBox>
+
+        <TableView fx:id="lessonsTable" prefHeight="500.0" prefWidth="550.0" HBox.hgrow="ALWAYS" style="-fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+            <columns>
+                <TableColumn fx:id="colId" prefWidth="65.0" text="Lesson ID"/>
+                <TableColumn fx:id="colSubject" prefWidth="110.0" text="Subject"/>
+                <TableColumn fx:id="colDay" prefWidth="95.0" text="Day"/>
+                <TableColumn fx:id="colTime" prefWidth="85.0" text="Time Slot"/>
+                <TableColumn fx:id="colPrice" prefWidth="65.0" text="Price"/>
+                <TableColumn fx:id="colTutor" prefWidth="125.0" text="Tutor Email"/>
+            </columns>
+        </TableView>
+    </HBox>
+</AnchorPane>

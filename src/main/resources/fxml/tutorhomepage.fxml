@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.Gui.TutorHomeGui">
+
+    <ImageView fitHeight="500.0" fitWidth="800.0" pickOnBounds="true">
+        <Image url="@../images/tutorhomepage.png"/>
+    </ImageView>
+
+    <HBox prefHeight="500.0" prefWidth="800.0">
+        <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="280.0" spacing="25.0" style="-fx-background-color: rgba(255, 255, 255, 0.88); -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 0); -fx-padding: 30px 20px 20px 20px;">
+            <VBox alignment="CENTER" spacing="5.0">
+                <ImageView fitHeight="50.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../images/books.png"/>
+                </ImageView>
+
+                <Label style="-fx-font-weight: bold; -fx-font-family: 'System'; -fx-font-size: 24px; -fx-text-fill: #1D4ED8;" text="Tutor Home"/>
+                <Label alignment="CENTER" prefWidth="220.0" text="Welcome Tutor!" textAlignment="CENTER" style="-fx-font-size: 12px; -fx-text-fill: blue;"/>
+                <VBox.margin>
+                    <Insets bottom="15.0"/>
+                </VBox.margin>
+            </VBox>
+
+            <Button fx:id="insertLessonButton" onAction="#insertLesson" prefHeight="65.0" prefWidth="240.0" style="-fx-background-color: #1D4ED8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 2);" text="Insert a lesson"/>
+            <Button fx:id="viewRequestsButton" onAction="#viewBookingRequests" prefHeight="65.0" prefWidth="240.0" style="-fx-background-color: #1D4ED8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-background-radius: 8px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 2);" text="Booking Requests"/>
+
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS"/>
+
+            <Button fx:id="logoutButton" onAction="#logout" prefHeight="35.0" prefWidth="240.0" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 5px; -fx-cursor: hand;" text="Logout"/>
+        </VBox>
+
+        <AnchorPane prefHeight="500.0" prefWidth="520.0" HBox.hgrow="ALWAYS"/>
+
+    </HBox>
+</AnchorPane>

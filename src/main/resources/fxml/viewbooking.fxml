@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="550.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.Gui.ViewBookingGui">
+
+    <ImageView fitHeight="580.0" fitWidth="966.0" pickOnBounds="true">
+        <Image url="@../images/books2.png"/>
+    </ImageView>
+
+    <HBox layoutX="20.0" layoutY="25.0" prefHeight="500.0" prefWidth="910.0" spacing="20.0">
+        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="240.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-background-radius: 10px; -fx-padding: 20px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);">
+            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../images/hat.png"/>
+            </ImageView>
+
+            <VBox alignment="CENTER" spacing="5.0">
+                <Label style="-fx-font-weight: bold; -fx-font-family: 'System'; -fx-font-size: 20px; -fx-text-fill: #1D4ED8;" text="My Bookings"/>
+                <Label alignment="CENTER" style="-fx-font-size: 12px; -fx-text-fill: blue;" text="Track or cancel your&#10;lesson reservations." textAlignment="CENTER"/>
+            </VBox>
+
+            <VBox fx:id="actionBox" alignment="CENTER" managed="false" spacing="12.0" visible="false">
+                <Button fx:id="cancelBookingButton" onAction="#cancelBooking" prefHeight="38.0" prefWidth="180.0" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5px;" text="Cancel Reservation"/>
+            </VBox>
+            <VBox prefHeight="50.0" VBox.vgrow="ALWAYS"/>
+            <Button fx:id="backButton" onAction="#goBack" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-text-fill: red; -fx-font-weight: bold; -fx-underline: true; -fx-cursor: hand;" text="Return to Student Home"/>
+        </VBox>
+
+        <TableView fx:id="bookingsTable" prefHeight="500.0" prefWidth="650.0" style="-fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5); -fx-background-color: rgba(255,255,255,0.85);" HBox.hgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colBookingId" prefWidth="100.0" text="Reservation ID"/>
+                <TableColumn fx:id="colSubject" prefWidth="120.0" text="Subject"/>
+                <TableColumn fx:id="colTutor" prefWidth="150.4000244140625" text="Tutor"/>
+                <TableColumn fx:id="colDay" prefWidth="105.60003662109375" text="Day"/>
+                <TableColumn fx:id="colTime" prefWidth="84.800048828125" text="Time"/>
+                <TableColumn fx:id="colStatus" prefWidth="90.39990234375" text="Actual State"/>
+            </columns>
+        </TableView>
+    </HBox>
+</AnchorPane>
