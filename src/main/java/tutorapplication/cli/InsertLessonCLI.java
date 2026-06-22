@@ -1,4 +1,4 @@
-package tutorapplication.CLI;
+package tutorapplication.cli;
 
 import tutorapplication.bean.SearchLessonBean;
 import tutorapplication.controller.BookingController;

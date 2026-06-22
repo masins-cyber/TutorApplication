@@ -1,4 +1,4 @@
-package tutorapplication.CLI;
+package tutorapplication.cli;
 
 import tutorapplication.model.Lesson;
 import tutorapplication.pattern.AbstractState;

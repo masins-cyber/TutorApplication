@@ -1,7 +1,7 @@
 package tutorapplication.pattern;
 
-import tutorapplication.CLI.LoginCLI;
-import tutorapplication.CLI.RegistrationCLI;
+import tutorapplication.cli.LoginCLI;
+import tutorapplication.cli.RegistrationCLI;
 
 public class InitialState extends AbstractState {
 

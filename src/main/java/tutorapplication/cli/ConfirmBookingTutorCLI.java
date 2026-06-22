@@ -1,4 +1,4 @@
-package tutorapplication.CLI;
+package tutorapplication.cli;
 
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.UserNotPresentException;

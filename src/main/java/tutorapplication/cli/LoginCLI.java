@@ -1,4 +1,4 @@
-package tutorapplication.CLI;
+package tutorapplication.cli;
 
 import tutorapplication.bean.LoginBean;
 import tutorapplication.controller.LoginController;
