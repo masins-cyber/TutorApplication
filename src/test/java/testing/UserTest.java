@@ -102,3 +102,4 @@ public class UserTest {
         logger.log(Level.INFO, "Duplicate Booking Test: OK (the controller successfully prevents double booking)");
     }
 }
+
