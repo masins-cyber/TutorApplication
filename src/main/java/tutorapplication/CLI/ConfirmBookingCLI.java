@@ -78,3 +78,4 @@ public class ConfirmBookingCLI extends AbstractState {
         stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
     }
 }
+

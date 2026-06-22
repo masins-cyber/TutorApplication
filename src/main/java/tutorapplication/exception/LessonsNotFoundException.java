@@ -5,3 +5,4 @@ public class LessonsNotFoundException extends Exception {
         super("No available lessons match the search criteria entered.");
     }
 }
+

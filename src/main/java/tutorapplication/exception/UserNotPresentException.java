@@ -5,3 +5,4 @@ public class UserNotPresentException extends Exception {
         super("Error: The user with email '" + email + "' is not present in the system.");
     }
 }
+

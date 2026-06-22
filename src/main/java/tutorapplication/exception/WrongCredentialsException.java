@@ -5,3 +5,4 @@ public class WrongCredentialsException extends Exception {
         super("Error: Email, password or role entered is incorrect.");
     }
 }
+

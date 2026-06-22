@@ -5,3 +5,4 @@ public class LessonAlreadyBookedException extends Exception {
         super("Error: The lesson #" + id + " has already been booked by another student!");
     }
 }
+

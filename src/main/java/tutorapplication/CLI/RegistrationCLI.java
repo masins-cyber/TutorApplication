@@ -67,3 +67,4 @@ public class RegistrationCLI extends AbstractState {
         }
     }
 }
+

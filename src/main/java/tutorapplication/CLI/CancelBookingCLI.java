@@ -80,3 +80,4 @@ public class CancelBookingCLI extends AbstractState {
         stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
     }
 }
+

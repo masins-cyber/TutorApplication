@@ -15,3 +15,4 @@ public interface UserDAO {
 
     User findUserByEmail(String email) throws UserNotPresentException;
 }
+

@@ -19,3 +19,4 @@ public interface BookingDAO {
 
     Booking findBookingById(int bookingId);
 }
+

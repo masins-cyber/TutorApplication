@@ -5,3 +5,4 @@ public class InvalidEmailException extends Exception {
         super("Error: The email format '" + email + "' is invalid! Make sure it contains an '@' and a domain (e.g. .com, .it).");
     }
 }
+

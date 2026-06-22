@@ -15,3 +15,4 @@ public interface LessonDAO {
 
     void updateLessonStatus(Lesson lesson, boolean available);
 }
+
