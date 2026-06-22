@@ -33,3 +33,4 @@ public class SearchLessonBean {
         this.maxPrice = maxPrice;
     }
 }
+
