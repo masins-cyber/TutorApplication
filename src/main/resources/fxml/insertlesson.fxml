@@ -65,3 +65,4 @@
         <Button fx:id="backButton" onAction="#goBack" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-text-fill: #1D4ED8; -fx-font-weight: bold; -fx-underline: true; -fx-cursor: hand;" text="Go back to homepage"/>
     </VBox>
 </AnchorPane>
+
