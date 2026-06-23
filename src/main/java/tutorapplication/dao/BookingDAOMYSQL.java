@@ -20,7 +20,7 @@ public class BookingDAOMYSQL implements BookingDAO {
     @Override
     public int saveBooking(Booking booking) throws LessonAlreadyBookedException {
         String checkQuery = "SELECT available FROM lessons WHERE id = ?";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
             checkStmt.setInt(1, booking.getId());
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next()) {
@@ -37,7 +37,7 @@ public class BookingDAOMYSQL implements BookingDAO {
 
         String query = "INSERT INTO bookings (lesson_id, student_email, status) VALUES (?, ?, ?)";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setInt(1, booking.getId());
             stmt.setString(2, booking.getStudentEmail());
@@ -65,7 +65,7 @@ public class BookingDAOMYSQL implements BookingDAO {
         List<Booking> pendingBookings = new java.util.ArrayList<>();
         String query = "SELECT b.booking_id, b.lesson_id, b.student_email, b.status " + "FROM bookings b JOIN lessons l ON b.lesson_id = l.id " + "WHERE l.tutor_email = ? AND b.status = 'booked'";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, tutorEmail);
             try (ResultSet rs = stmt.executeQuery()) {
                 while(rs.next()) {
@@ -83,7 +83,7 @@ public class BookingDAOMYSQL implements BookingDAO {
     @Override
     public boolean updateBookingStatus(int bookingId, String newStatus) {
         String query = "UPDATE bookings SET status = ? WHERE booking_id = ?";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, newStatus);
             stmt.setInt(2, bookingId);
@@ -101,7 +101,7 @@ public class BookingDAOMYSQL implements BookingDAO {
         List<Booking> bookings = new java.util.ArrayList<>();
         String query = "SELECT booking_id, lesson_id, student_email, status FROM bookings WHERE student_email = ?";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, studentEmail);
             try(ResultSet rs = stmt.executeQuery()) {
                 while(rs.next()) {
@@ -120,7 +120,7 @@ public class BookingDAOMYSQL implements BookingDAO {
     public boolean deleteBooking(int bookingId) {
         String query = "DELETE FROM bookings WHERE booking_id = ?";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, bookingId);
 
             return stmt.executeUpdate() > 0;
@@ -135,7 +135,7 @@ public class BookingDAOMYSQL implements BookingDAO {
     public Booking findBookingById(int bookingId) {
         String query = "SELECT booking_id, lesson_id, student_email, status FROM bookings WHERE booking_id = ?";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, bookingId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

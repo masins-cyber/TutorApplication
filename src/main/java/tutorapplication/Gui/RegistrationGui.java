@@ -44,7 +44,7 @@ public class RegistrationGui {
 
     @FXML
     public void initialize() {
-        roleComboBox.setItems(FXCollections.observableArrayList("Student", "Tutor"));
+        roleComboBox.setItems(FXCollections.observableArrayList(STUDENT_ROLE, "Tutor"));
     }
 
     @FXML

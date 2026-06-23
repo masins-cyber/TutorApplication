@@ -54,60 +54,14 @@ public class ViewBookingGui {
         this.studentEmail = email;
         loadStudentBookings();
     }
-
     @FXML
     public void initialize() {
         colBookingId.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
-        colStatus.setCellValueFactory(cellData -> {
-            String rawStatus = cellData.getValue().getStatus();
-            if (rawStatus.equalsIgnoreCase("accepted")) {
-                return new SimpleStringProperty("ACCEPTED");
-            } else if (rawStatus.equalsIgnoreCase("rejected")) {
-                return new SimpleStringProperty("REJECTED");
-            } else {
-                return new SimpleStringProperty("BOOKED");
-            }
-        });
-
-        colSubject.setCellValueFactory(cellData -> {
-            int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
-            if (l != null) {
-                return new SimpleStringProperty(l.getSubject().toUpperCase());
-            } else {
-                return new SimpleStringProperty("N/A");
-            }
-        });
-
-        colTutor.setCellValueFactory(cellData -> {
-            int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
-            if (l != null) {
-                return new SimpleStringProperty(l.getTutorEmail());
-            } else {
-                return new SimpleStringProperty("N/A");
-            }
-        });
-
-        colDay.setCellValueFactory(cellData -> {
-            int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
-            if (l != null) {
-                return new SimpleStringProperty(l.getDate().toUpperCase());
-            } else {
-                return new SimpleStringProperty("N/A");
-            }
-        });
-
-        colTime.setCellValueFactory(cellData -> {
-            int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
-            if (l != null) {
-                return new SimpleStringProperty(l.getTime());
-            } else {
-                return new SimpleStringProperty("N/A");
-            }
-        });
+        colStatus.setCellValueFactory(cellData -> new SimpleStringProperty(formatStatus(cellData.getValue().getStatus())));
+        colSubject.setCellValueFactory(cellData -> new SimpleStringProperty(getLessonField(cellData.getValue().getId(), "SUBJECT")));
+        colTutor.setCellValueFactory(cellData -> new SimpleStringProperty(getLessonField(cellData.getValue().getId(), "TUTOR")));
+        colDay.setCellValueFactory(cellData -> new SimpleStringProperty(getLessonField(cellData.getValue().getId(), "DAY")));
+        colTime.setCellValueFactory(cellData -> new SimpleStringProperty(getLessonField(cellData.getValue().getId(), "TIME")));
 
         bookingsTable.getSelectionModel().selectedItemProperty().addListener(observable -> {
             logger.log(Level.FINE, "Selection track altered: {0}", observable);
@@ -122,6 +76,29 @@ public class ViewBookingGui {
         });
     }
 
+    private String formatStatus(String rawStatus) {
+        if (rawStatus.equalsIgnoreCase("accepted"))
+            return "ACCEPTED";
+        if (rawStatus.equalsIgnoreCase("rejected"))
+            return "REJECTED";
+
+        return "BOOKED";
+    }
+
+    private String getLessonField(int lessonId, String fieldType) {
+        Lesson l = bookingController.getLessonDetails(lessonId);
+        if (l == null)
+            return "N/A";
+
+        return switch (fieldType) {
+            case "SUBJECT" -> l.getSubject().toUpperCase();
+            case "TUTOR" -> l.getTutorEmail();
+            case "DAY" -> l.getDate().toUpperCase();
+            case "TIME" -> l.getTime();
+            default -> "N/A";
+        };
+    }
+
     private void loadStudentBookings() {
         List<Booking> myBookings = bookingController.getAllStudentBookings(this.studentEmail);
         bookingsTable.setItems(FXCollections.observableArrayList(myBookings));
@@ -134,7 +111,7 @@ public class ViewBookingGui {
             return;
 
         if (selectedBooking.getStatus().equalsIgnoreCase("rejected")) {
-            showAlert(Alert.AlertType.ERROR, "Error",
+            showAlert("Error",
                     "This booking has already been rejected by the tutor, there is no need to cancel it.");
             return;
         }
@@ -155,7 +132,7 @@ public class ViewBookingGui {
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error moving to cancel booking workspace", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Unable to open cancellation layout.");
+            showAlert("System Error", "Unable to open cancellation layout.");
         }
     }
 
@@ -179,8 +156,8 @@ public class ViewBookingGui {
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

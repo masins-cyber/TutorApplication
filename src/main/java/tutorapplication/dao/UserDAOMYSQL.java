@@ -19,7 +19,7 @@ public class UserDAOMYSQL implements UserDAO {
     @Override
     public User findUserByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         String query = "SELECT * FROM users WHERE email = ?";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
 
@@ -43,7 +43,7 @@ public class UserDAOMYSQL implements UserDAO {
     @Override
     public User findUserByEmail(String email) throws UserNotPresentException {
         String query = "SELECT * FROM users WHERE email = ?";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
 
@@ -71,7 +71,7 @@ public class UserDAOMYSQL implements UserDAO {
         }
 
         String query = "INSERT INTO users (email, password, name, surname, role, student_id) VALUES (?, ?, ?, ?, ?, ?)";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, user.getEmail());
             String encryptedPassword = PasswordHasher.hashPassword(user.getPassword());
@@ -101,7 +101,7 @@ public class UserDAOMYSQL implements UserDAO {
     @Override
     public boolean existsByEmail(String email) {
         String query = "SELECT 1 FROM users WHERE email = ?";
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
             return stmt.executeQuery().next();
         }

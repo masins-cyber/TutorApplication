@@ -18,7 +18,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
         String query = "INSERT INTO lessons (subject, day, time_slot, price, tutor_email, available) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, lesson.getSubject());
             stmt.setString(2, lesson.getDate());
@@ -48,7 +48,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
         String query = "SELECT * FROM lessons WHERE LOWER(subject) = LOWER(?) " + "AND (LOWER(day) = LOWER(?) OR ? = '') " + "AND (time_slot = ? OR ? = '') " + "AND price <= ? AND available = 1";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, subject);
             stmt.setString(2, date);
             stmt.setString(3, date);
@@ -78,7 +78,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
         String query = "SELECT * FROM lessons WHERE id = ?";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, lessonId);
 
@@ -98,7 +98,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
         String query = "UPDATE lessons SET available = ? WHERE tutor_email = ? AND day = ? AND time_slot = ?";
 
-        try (java.sql.Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setBoolean(1, available);
             stmt.setString(2, lesson.getTutorEmail());
