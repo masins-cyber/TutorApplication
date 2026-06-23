@@ -10,6 +10,9 @@ import tutorapplication.pattern.StateMachineImpl;
 import tutorapplication.others.Print;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Start {
 
@@ -84,6 +87,9 @@ public class Start {
         else {
             Print.println("[SYSTEM] Launching Graphical User Interface...\n");
             scanner.close();
+            LogManager.getLogManager().reset();
+            Logger.getLogger("javafx").setLevel(Level.OFF);
+            Logger.getLogger("com.sun.javafx").setLevel(Level.OFF);
             Application.launch(JavaFXLauncher.class);
         }
     }
