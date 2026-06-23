@@ -23,7 +23,7 @@ public class Config {
             properties.load(fis);
             persistenceType = properties.getProperty("persistence.type", "mysql");
         }
-        catch (IOException e) {
+        catch (IOException _) {
             logger.log(Level.SEVERE,"Error reading " + CONFIG_FILE + ", using default: mysql");
             persistenceType = "mysql";
         }

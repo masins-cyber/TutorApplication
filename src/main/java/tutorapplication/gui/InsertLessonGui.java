@@ -75,7 +75,7 @@ public class InsertLessonGui {
                 showAlert(Alert.AlertType.ERROR, "Database Error", "Unable to save the lesson into the system.");
             }
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException _) {
             logger.log(Level.WARNING, "Format error for the price entered: {0}", priceText);
             showAlert(Alert.AlertType.ERROR, "Invalid Price", "Please enter a valid numeric value for the price.");
         }

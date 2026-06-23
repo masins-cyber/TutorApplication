@@ -45,7 +45,7 @@ public class LessonResultsCLI extends AbstractState {
                     Print.println("Getting lesson with ID " + id);
                     stateMachine.setState(new ConfirmBookingCLI(stateMachine, id, this.studentEmail));
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException _) {
                     Print.println("\n[ERROR] Insert a valid Id number!");
                 }
                 break;

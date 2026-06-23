@@ -12,7 +12,7 @@ public class PasswordHasher {
         try {
             return BCrypt.checkpw(plainTextPassword, hashedPassword);
         }
-        catch (Exception e) {
+        catch (Exception _) {
             return false;
         }
     }

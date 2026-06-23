@@ -83,7 +83,7 @@ public class SearchLessonGui {
             stage.show();
 
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException _) {
             logger.log(Level.WARNING, "Invalid max price format!" );
             showAlert(Alert.AlertType.ERROR, "Invalid Price", "Please enter a valid numeric value for the budget.");
         }

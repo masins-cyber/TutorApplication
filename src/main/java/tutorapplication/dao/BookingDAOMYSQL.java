@@ -30,7 +30,7 @@ public class BookingDAOMYSQL implements BookingDAO {
                     }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error during lesson availability pre-check for booking ID: {0}", booking.getId());
             return -1;
         }
@@ -74,7 +74,7 @@ public class BookingDAOMYSQL implements BookingDAO {
                 }
             }
         }
-        catch (SQLException e) {
+        catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error while retrieving pending bookings for tutor: {0}", tutorEmail);
         }
         return pendingBookings;
@@ -89,7 +89,7 @@ public class BookingDAOMYSQL implements BookingDAO {
             stmt.setInt(2, bookingId);
             return stmt.executeUpdate() > 0;
         }
-        catch (SQLException e) {
+        catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error while updating status for booking ID: {0}", bookingId);
             return false;
         }
@@ -110,7 +110,7 @@ public class BookingDAOMYSQL implements BookingDAO {
                 }
             }
         }
-        catch (SQLException e) {
+        catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error while fetching all bookings for student: {0}", studentEmail);
         }
         return bookings;
@@ -125,7 +125,7 @@ public class BookingDAOMYSQL implements BookingDAO {
 
             return stmt.executeUpdate() > 0;
         }
-        catch (SQLException e) {
+        catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error while deleting booking record with ID: {0}", bookingId);
             return false;
         }
@@ -143,7 +143,7 @@ public class BookingDAOMYSQL implements BookingDAO {
                 }
             }
         }
-        catch (SQLException e) {
+        catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error during single booking lookup for ID: {0}", bookingId);
         }
         return null;

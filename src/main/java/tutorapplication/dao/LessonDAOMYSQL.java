@@ -87,7 +87,7 @@ public class LessonDAOMYSQL implements LessonDAO {
                     return new Lesson(rs.getInt("id"), rs.getString("subject"), rs.getString("day"), rs.getString("time_slot"), rs.getDouble("price"), rs.getString("tutor_email"), rs.getBoolean("available"));
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException _) {
             logger.log(Level.SEVERE, "Database error while looking up lesson with ID: {0}", lessonId);
         }
         return null;

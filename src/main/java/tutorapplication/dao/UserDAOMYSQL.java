@@ -55,7 +55,7 @@ public class UserDAOMYSQL implements UserDAO {
             throw new UserNotPresentException(email);
         }
         catch (SQLException e) {
-            logger.log(Level.SEVERE, "Database error while searching user by email: " + email, e);
+            logger.log(Level.SEVERE, "Database error while searching user by email: {0}", email);
         }
         return null;
     }

@@ -79,7 +79,7 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         try {
             targetBookingId = Integer.parseInt(scanner.nextLine().trim());
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException _) {
             Print.println("\n[ERROR] Invalid input! You must insert a valid numeric ID.");
             stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
             return;
