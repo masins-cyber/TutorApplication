@@ -64,7 +64,6 @@ public class ConfirmBookingCLI extends AbstractState {
         else {
             Print.println("\n[ADVICE] Reservation canceled by student.");
         }
-
         goBack(context);
     }
 

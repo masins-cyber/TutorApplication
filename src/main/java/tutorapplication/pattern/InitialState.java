@@ -35,7 +35,7 @@ public class InitialState extends AbstractState {
     @Override
     public void display() {
         Print.println("\n*******************************");
-        Print.println("* TUTOR APPLICATION      *");
+        Print.println("*        TUTOR APPLICATION      *");
         Print.println("*******************************");
         Print.println("1) Enter");
         Print.println("2) Register");

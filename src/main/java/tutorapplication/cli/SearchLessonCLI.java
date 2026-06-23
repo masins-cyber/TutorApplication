@@ -20,20 +20,14 @@ public class SearchLessonCLI extends AbstractState {
         Scanner scanner = new Scanner(System.in);
         SearchLessonBean searchBean = new SearchLessonBean();
 
-        Print.print("Subject you're searching for (or leave empty/write '0' to go back): ");
-        String subject = scanner.nextLine().trim();
-
-        if (subject.equals("0")) {
-            goBack(context);
-            return;
-        }
-        searchBean.setSubject(subject.toLowerCase());
+        Print.print("Subject you're searching for: ");
+        searchBean.setSubject(scanner.nextLine().trim().toLowerCase());
 
         Print.print("Preferred day (Click enter for whatever day): ");
-        searchBean.setDay(scanner.nextLine().toLowerCase());
+        searchBean.setDay(scanner.nextLine().trim().toLowerCase());
 
         Print.print("Preferred time (Click enter for whatever time): ");
-        searchBean.setTimeSlot(scanner.nextLine());
+        searchBean.setTimeSlot(scanner.nextLine().trim());
 
         Print.print("Your budget: ");
         String priceStr = scanner.nextLine().trim();
@@ -53,9 +47,7 @@ public class SearchLessonCLI extends AbstractState {
         try {
             List<Lesson> foundLessons = controller.searchLessons(searchBean);
             Print.println("\n[SUCCESS] Results found!");
-
             goNext(context, new LessonResultsCLI(foundLessons));
-
         }
         catch (LessonsNotFoundException e) {
             Print.println("\n=================================================");
