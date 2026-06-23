@@ -12,6 +12,7 @@ import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.model.Lesson;
 import tutorapplication.others.Config;
+import tutorapplication.others.Print;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -42,7 +43,7 @@ public class UserTest {
 
         assertEquals("No available lessons match the search criteria entered.", ex.getMessage());
 
-        logger.log(Level.INFO, "Non-existent Filters Test: OK (LessonsNotFoundException correctly verified)");
+        Print.println("Non-existent Filters Test: OK (LessonsNotFoundException correctly verified)");
     }
 
     @Test
@@ -66,7 +67,7 @@ public class UserTest {
             logger.log(Level.SEVERE, e.getMessage());
         }
         catch (Exception e) {
-            logger.log(Level.WARNING, "Setup Tutor warning: " + e.getMessage());
+            logger.log(Level.WARNING, "Setup Tutor warning: {0}", e.getMessage());
         }
 
         SearchLessonBean lessonBean = new SearchLessonBean();
@@ -99,7 +100,7 @@ public class UserTest {
 
         assertThrows(LessonAlreadyBookedException.class, () -> bookingController.bookLesson(bookingBean), "The controller must prevent a second booking by raising LessonAlreadyBookedException.");
 
-        logger.log(Level.INFO, "Duplicate Booking Test: OK (the controller successfully prevents double booking)");
+        Print.println("Duplicate Booking Test: OK (the controller successfully prevents double booking)");
     }
 }
 

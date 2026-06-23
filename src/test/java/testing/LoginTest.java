@@ -12,6 +12,7 @@ import tutorapplication.others.Config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tutorapplication.others.Print;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,11 +44,11 @@ class LoginTest {
 
             assertEquals("Simone", result.getName(), "MySQL authenticated user name does not match.");
 
-            logger.log(Level.INFO, "Test Login Success: OK (Authentication success on MySQL for " + result.getEmail() + ")");
+            Print.println("Test Login Success: OK (Authentication success on MySQL for " + result.getEmail() + ")");
 
         }
         catch (Exception e) {
-            logger.log(Level.SEVERE, "Critical exception encountered during testing: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, "Critical exception encountered during testing: {0}", e.getMessage());
             fail("The test threw an unexpected exception: " + e.getMessage());
         }
     }
@@ -62,7 +63,7 @@ class LoginTest {
 
         assertThrows(WrongCredentialsException.class, () -> loginController.login(loginBean), "The controller had to block access because the declared role does not match the DB.");
 
-        logger.log(Level.INFO, "Wrong Credentials Test: OK (WrongCredentialsException successfully thrown)");
+        Print.println("Wrong Credentials Test: OK (WrongCredentialsException successfully thrown)");
     }
 
     @Test
@@ -74,7 +75,7 @@ class LoginTest {
 
         assertThrows(UserNotPresentException.class, () -> loginController.login(loginBean), "The system should have thrown UserNotPresentException for an unregistered email.");
 
-        logger.log(Level.INFO, "User Not Present Test: OK (UserNotPresentException successfully thrown)");
+        Print.println("User Not Present Test: OK (UserNotPresentException successfully thrown)");
     }
 
     @Test
@@ -92,7 +93,7 @@ class LoginTest {
 
         assertThrows(EmailAlreadyInUseException.class, () -> registration.register(userBean), "The controller should prevent the recording of an existing email");
 
-        logger.log(Level.INFO, "Duplicate Registration Test: OK (EmailAlreadyInUseException thrown)");
+        Print.println("Duplicate Registration Test: OK (EmailAlreadyInUseException thrown)");
     }
 
     @Test
@@ -112,6 +113,6 @@ class LoginTest {
             registration.register(tutor);
         }, "Registration of a new instructor should be successful");
 
-        logger.log(Level.INFO, "Instructor Registration Test: OK for {0}", randomEmail);
+        Print.println("Instructor Registration Test: OK for " + randomEmail);
     }
 }

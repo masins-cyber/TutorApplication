@@ -1,7 +1,9 @@
 package testing;
 
-import tutorapplication.others.Connect; // Importiamo la tua nuova classe Connect
+import tutorapplication.others.Connect;
 import org.junit.jupiter.api.Test;
+import tutorapplication.others.Print;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
@@ -26,12 +28,11 @@ class DBConnectionTest {
 
             try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SELECT 1")) {
                 assertTrue(rs.next(), "The ResultSet should have at least one result.");
-
-                logger.log(Level.INFO, "Database Test: OK (Connection successfully established via Connect Singleton)");
+                Print.println("Database Test: OK (Connection successfully established via Connect Singleton)");
             }
         }
         catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during the database connection test: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error during the database connection test: {0}", e.getMessage());
             fail("The test failed due to an exception: " + e.getMessage());
         }
     }
