@@ -4,7 +4,9 @@ public class BookingBean {
     private int id;
     private String studentEmail;
 
-    public BookingBean() {}
+    public BookingBean() {
+        // Default constructor for framework initialization
+    }
 
     public int getId() {
         return id;

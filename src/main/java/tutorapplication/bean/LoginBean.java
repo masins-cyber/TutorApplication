@@ -5,7 +5,9 @@ public class LoginBean {
     private String password;
     private boolean isTutor;
 
-    public LoginBean() {}
+    public LoginBean() {
+        // Default constructor for framework initialization
+    }
 
     public String getEmail() {
         return email;

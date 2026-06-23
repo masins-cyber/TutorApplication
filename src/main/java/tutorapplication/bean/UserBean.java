@@ -8,7 +8,9 @@ public class UserBean {
     private String role;
     private String studentId;
 
-    public UserBean() {}
+    public UserBean() {
+        // Default constructor for framework initialization
+    }
 
     public String getName() {
         return name;

@@ -6,7 +6,9 @@ public class SearchLessonBean {
     private String timeSlot;
     private double maxPrice;
 
-    public SearchLessonBean() {}
+    public SearchLessonBean() {
+        // Default constructor for framework initialization
+    }
 
     public String getSubject() {
         return subject;

@@ -12,6 +12,10 @@ import java.util.logging.Level;
 public class BookingDAOMYSQL implements BookingDAO {
 
     private static final Logger logger = Logger.getLogger(BookingDAOMYSQL.class.getName());
+    private static final String COLUMN_LESSON_ID = "lesson_id";
+    private static final String COLUMN_BOOKING_ID = "booking_id";
+    private static final String COLUMN_STUDENT_EMAIL = "student_email";
+    private static final String COLUMN_STATUS = "status";
 
     @Override
     public int saveBooking(Booking booking) throws LessonAlreadyBookedException {
@@ -65,7 +69,7 @@ public class BookingDAOMYSQL implements BookingDAO {
             stmt.setString(1, tutorEmail);
             try (ResultSet rs = stmt.executeQuery()) {
                 while(rs.next()) {
-                    Booking booking = new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                    Booking booking = new Booking(rs.getInt(COLUMN_BOOKING_ID), rs.getInt(COLUMN_LESSON_ID), rs.getString(COLUMN_STUDENT_EMAIL), rs.getString(COLUMN_STATUS));
                     pendingBookings.add(booking);
                 }
             }
@@ -101,7 +105,7 @@ public class BookingDAOMYSQL implements BookingDAO {
             stmt.setString(1, studentEmail);
             try(ResultSet rs = stmt.executeQuery()) {
                 while(rs.next()) {
-                    Booking booking = new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                    Booking booking = new Booking(rs.getInt(COLUMN_BOOKING_ID), rs.getInt(COLUMN_LESSON_ID), rs.getString(COLUMN_STUDENT_EMAIL), rs.getString(COLUMN_STATUS));
                     bookings.add(booking);
                 }
             }
@@ -135,7 +139,7 @@ public class BookingDAOMYSQL implements BookingDAO {
             stmt.setInt(1, bookingId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Booking(rs.getInt("booking_id"), rs.getInt("lesson_id"), rs.getString("student_email"), rs.getString("status"));
+                    return new Booking(rs.getInt(COLUMN_BOOKING_ID), rs.getInt(COLUMN_LESSON_ID), rs.getString(COLUMN_STUDENT_EMAIL), rs.getString(COLUMN_STATUS));
                 }
             }
         }

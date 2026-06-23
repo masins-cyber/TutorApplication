@@ -14,6 +14,8 @@ import java.sql.*;
 public class UserDAOMYSQL implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOMYSQL.class.getName());
+    private static final String COLUMN_PASSWORD = "password";
+
     @Override
     public User findUserByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         String query = "SELECT * FROM users WHERE email = ?";
@@ -22,10 +24,10 @@ public class UserDAOMYSQL implements UserDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String hashedPasswordFromDB = rs.getString("password");
+                String hashedPasswordFromDB = rs.getString(COLUMN_PASSWORD);
 
                 if (PasswordHasher.checkPassword(password, hashedPasswordFromDB)) {
-                    User user = new User(rs.getString("email"), rs.getString("password"), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
+                    User user = new User(rs.getString("email"), rs.getString(COLUMN_PASSWORD), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
                     user.setStudentId(rs.getString("student_id"));
                     return user;
                 }
@@ -46,7 +48,7 @@ public class UserDAOMYSQL implements UserDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                User user = new User(rs.getString("email"), rs.getString("password"), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
+                User user = new User(rs.getString("email"), rs.getString(COLUMN_PASSWORD), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
                 user.setStudentId(rs.getString("student_id"));
                 return user;
             }
