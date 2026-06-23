@@ -7,10 +7,11 @@ import tutorapplication.model.Lesson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookingDAOInMemory implements BookingDAO {
     private static final List<Booking> bookingsTable = new ArrayList<>();
-    private static int bookingIdCounter = 1;
+    private static final AtomicInteger bookingIdCounter = new AtomicInteger(1);
 
     @Override
     public int saveBooking(Booking booking) throws LessonAlreadyBookedException {
@@ -26,7 +27,7 @@ public class BookingDAOInMemory implements BookingDAO {
         Booking bookingToSave = new Booking(booking.getId(), booking.getStudentEmail());
         bookingToSave.setStatus(booking.getStatus());
 
-        int generatedId = bookingIdCounter++;
+        int generatedId = bookingIdCounter.getAndIncrement();
         bookingToSave.setBookingId(generatedId);
 
         bookingsTable.add(bookingToSave);

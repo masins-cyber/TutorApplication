@@ -6,11 +6,12 @@ import tutorapplication.model.Lesson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LessonDAOInMemory implements LessonDAO {
 
     private static final List<Lesson> lessonsTable = new ArrayList<>();
-    private static int idCounter = 1;
+    private static final AtomicInteger idCounter = new AtomicInteger(1);
 
     @Override
     public boolean saveLesson(Lesson lesson) {
@@ -23,7 +24,7 @@ public class LessonDAOInMemory implements LessonDAO {
                 return false;
             }
         }
-        Lesson lessonToSave = new Lesson(idCounter++, lesson.getSubject(), lesson.getDate(), lesson.getTime(), lesson.getPrice(), lesson.getTutorEmail(), true);
+        Lesson lessonToSave = new Lesson(idCounter.getAndIncrement(), lesson.getSubject(), lesson.getDate(), lesson.getTime(), lesson.getPrice(), lesson.getTutorEmail(), true);
         lessonsTable.add(lessonToSave);
         return true;
     }
