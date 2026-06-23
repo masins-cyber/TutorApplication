@@ -1,5 +1,7 @@
 package tutorapplication.pattern;
 
+import tutorapplication.others.Print;
+
 import java.util.Scanner;
 
 public class StateMachineImpl implements StateMachine {
@@ -26,7 +28,7 @@ public class StateMachineImpl implements StateMachine {
 
             if (input.equalsIgnoreCase("exit")) {
                 isRunning = false;
-                System.out.println("Closing application...");
+                Print.println("Closing application...");
             }
             else {
                 currentState.handleInput(input);

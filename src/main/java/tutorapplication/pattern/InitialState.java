@@ -2,6 +2,7 @@ package tutorapplication.pattern;
 
 import tutorapplication.cli.LoginCLI;
 import tutorapplication.cli.RegistrationCLI;
+import tutorapplication.others.Print;
 
 public class InitialState extends AbstractState {
 
@@ -11,28 +12,28 @@ public class InitialState extends AbstractState {
 
     @Override
     public void display() {
-        System.out.println("\n*******************************");
-        System.out.println("*      TUTOR APPLICATION      *");
-        System.out.println("*******************************");
-        System.out.println("1) Enter");
-        System.out.println("2) Register");
-        System.out.println("Write 'exit' to exit.");
-        System.out.print("Select an option: ");
+        Print.println("\n*******************************");
+        Print.println("*      TUTOR APPLICATION      *");
+        Print.println("*******************************");
+        Print.println("1) Enter");
+        Print.println("2) Register");
+        Print.println("Write 'exit' to exit.");
+        Print.print("Select an option: ");
     }
 
     @Override
     public void handleInput(String input) {
         switch (input) {
             case "1":
-                System.out.println("Moving to the login phase...");
+                Print.println("Moving to the login phase...");
                 stateMachine.setState(new LoginCLI(stateMachine));
                 break;
             case "2":
-                System.out.println("Opening registration form...");
+                Print.println("Opening registration form...");
                 stateMachine.setState(new RegistrationCLI(stateMachine));
                 break;
             default:
-                System.out.println("Command not recognized.");
+                Print.println("Command not recognized.");
                 break;
         }
     }

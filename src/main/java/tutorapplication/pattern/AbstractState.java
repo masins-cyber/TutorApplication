@@ -1,5 +1,7 @@
 package tutorapplication.pattern;
 
+import tutorapplication.others.Print;
+
 public abstract class AbstractState {
     protected StateMachine stateMachine;
 
@@ -11,9 +13,9 @@ public abstract class AbstractState {
     public void handleInput(String input) {}
 
     public void printHeader(String title) {
-        System.out.println("\n============");
-        System.out.println("Tutor Application - " + title.toUpperCase());
-        System.out.println("============");
+        Print.println("\n============");
+        Print.println("Tutor Application - " + title.toUpperCase());
+        Print.println("============");
     }
 }
 
