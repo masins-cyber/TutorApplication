@@ -60,9 +60,4 @@ public class StateMachineImpl implements StateMachine {
     public void setSessionUser(LoginBean sessionUser) {
         this.sessionUser = sessionUser;
     }
-
-    @Override
-    public AbstractState getState() {
-        return currentState;
-    }
 }
