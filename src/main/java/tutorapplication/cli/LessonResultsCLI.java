@@ -1,6 +1,7 @@
 package tutorapplication.cli;
 
 import tutorapplication.model.Lesson;
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachine;
 
@@ -24,40 +25,40 @@ public class LessonResultsCLI extends AbstractState {
         printHeader("Search Results");
         for (int i = 0; i < lessonList.size(); i++) {
             Lesson l = lessonList.get(i);
-            System.out.println("ID: " + l.getId() + " | Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime() + " | Price: " + l.getPrice() + "€" + " | Tutor: " + l.getTutorEmail());
+            Print.println("ID: " + l.getId() + " | Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime() + " | Price: " + l.getPrice() + "€" + " | Tutor: " + l.getTutorEmail());
         }
 
-        System.out.println("\nOPTIONS:");
-        System.out.println("1) Book a lesson through the ID.");
-        System.out.println("2) Search for a new lesson.");
-        System.out.println("3) Go to the student page.");
-        System.out.print("Select an option: ");
+        Print.println("\nOPTIONS:");
+        Print.println("1) Book a lesson through the ID.");
+        Print.println("2) Search for a new lesson.");
+        Print.println("3) Go to the student page.");
+        Print.print("Select an option: ");
     }
 
     @Override
     public void handleInput(String input) {
         switch (input) {
             case "1":
-                System.out.print("Insert the lesson ID that you want to book: ");
+                Print.print("Insert the lesson ID that you want to book: ");
                 int id = Integer.parseInt(scanner.nextLine().trim());
                 try {
-                    System.out.println("Getting lesson with ID " + id);
+                    Print.println("Getting lesson with ID " + id);
                     stateMachine.setState(new ConfirmBookingCLI(stateMachine, id, this.studentEmail));
                 }
                 catch (NumberFormatException e) {
-                    System.out.println("\n[ERROR] Insert a valid Id number!");
+                    Print.println("\n[ERROR] Insert a valid Id number!");
                 }
                 break;
             case "2":
-                System.out.println("Going to the searching page!");
+                Print.println("Going to the searching page!");
                 stateMachine.setState(new SearchLessonCLI(stateMachine, this.studentEmail));
                 break;
             case "3":
-                System.out.println("Going to the student page!");
+                Print.println("Going to the student page!");
                 stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
                 break;
             default:
-                System.out.println("Invalid option. Please try again.");
+                Print.println("Invalid option. Please try again.");
                 break;
         }
     }

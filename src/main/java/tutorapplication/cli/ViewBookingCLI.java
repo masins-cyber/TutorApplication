@@ -3,6 +3,7 @@ package tutorapplication.cli;
 import tutorapplication.controller.BookingController;
 import tutorapplication.model.Booking;
 import tutorapplication.model.Lesson;
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachine;
 
@@ -25,39 +26,39 @@ public class ViewBookingCLI extends AbstractState {
         printHeader("My bookings");
 
         if(myBookings.isEmpty()) {
-            System.out.println("\nYou haven't made any reservations yet.");
-            System.out.println("Press ENTER to return to Student Home.");
+            Print.println("\nYou haven't made any reservations yet.");
+            Print.println("Press ENTER to return to Student Home.");
             return;
         }
-        System.out.println("\nHere is the complete list of your requests:");
+        Print.println("\nHere is the complete list of your requests:");
         for (int i = 0; i < myBookings.size(); i++) {
             Booking b = myBookings.get(i);
             Lesson l = bookingController.getLessonDetails(b.getId());
 
-            System.out.println("----------------------------------------");
+            Print.println("----------------------------------------");
 
             if (b.getStatus().equalsIgnoreCase("accepted")) {
-                System.out.println("CONFIRMED BOOKINGS: #" + b.getBookingId());
+                Print.println("CONFIRMED BOOKINGS: #" + b.getBookingId());
             }
             else if (b.getStatus().equalsIgnoreCase("rejected")) {
-                System.out.println("REJECTED BOOKINGS: #" + b.getBookingId());
+                Print.println("REJECTED BOOKINGS: #" + b.getBookingId());
             }
             else {
-                System.out.println("RESERVATION MADE (Booked that is waiting for tutor): #" + b.getBookingId());
+                Print.println("RESERVATION MADE (Booked that is waiting for tutor): #" + b.getBookingId());
             }
             if (l != null) {
-                System.out.println("   Subject: " + l.getSubject());
-                System.out.println("   Tutor: " + l.getTutorEmail());
-                System.out.println("   Day: " + l.getDate() + " | Time: " + l.getTime());
+                Print.println("   Subject: " + l.getSubject());
+                Print.println("   Tutor: " + l.getTutorEmail());
+                Print.println("   Day: " + l.getDate() + " | Time: " + l.getTime());
             }
-            System.out.println("   Actual state: [" + b.getStatus().toUpperCase() + "]");
+            Print.println("   Actual state: [" + b.getStatus().toUpperCase() + "]");
         }
 
-        System.out.println("----------------------------------------");
-        System.out.println("\nOPTIONS:");
-        System.out.println("1) Delete/Cancel a reservation.");
-        System.out.println("2) Return to Student Home.");
-        System.out.print("Select an option: ");
+        Print.println("----------------------------------------");
+        Print.println("\nOPTIONS:");
+        Print.println("1) Delete/Cancel a reservation.");
+        Print.println("2) Return to Student Home.");
+        Print.print("Select an option: ");
     }
 
     @Override
@@ -70,15 +71,15 @@ public class ViewBookingCLI extends AbstractState {
         }
         switch (choose) {
             case "1":
-                System.out.println("Going to delete the booking...");
+                Print.println("Going to delete the booking...");
                 stateMachine.setState(new CancelBookingCLI(stateMachine, this.studentEmail, this.myBookings));
                 break;
             case "2":
-                System.out.println("Going to the student page...");
+                Print.println("Going to the student page...");
                 stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
                 break;
             default:
-                System.out.println("[ADVISE] Invalid option. Retry.");
+                Print.println("[ADVISE] Invalid option. Retry.");
                 stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
                 break;
         }

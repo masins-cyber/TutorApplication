@@ -5,6 +5,7 @@ import tutorapplication.controller.LoginController;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.model.User;
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachine;
 import tutorapplication.pattern.InitialState;
@@ -22,11 +23,11 @@ public class LoginCLI extends AbstractState {
     public void display() {
         printHeader("Login Screen");
 
-        System.out.print("Email: ");
+        Print.print("Email: ");
         String email = scanner.nextLine();
-        System.out.print("Password: ");
+        Print.print("Password: ");
         String password = scanner.nextLine();
-        System.out.print("Are you a Tutor? (yes/no): ");
+        Print.print("Are you a Tutor? (yes/no): ");
         String choice = scanner.nextLine();
 
         boolean isTutor = choice.equalsIgnoreCase("yes");
@@ -42,7 +43,7 @@ public class LoginCLI extends AbstractState {
         LoginController loginController = new LoginController();
         try {
             User user = loginController.login(loginBean);
-            System.out.println("\nLogin Successful! Welcome back.");
+            Print.println("\nLogin Successful! Welcome back.");
 
             if(loginBean.isTutor()) {
                 stateMachine.setState(new TutorHomeCLI(stateMachine, user.getEmail()));
@@ -52,12 +53,12 @@ public class LoginCLI extends AbstractState {
             }
         }
         catch (UserNotPresentException e) {
-            System.out.println("\n[LOGIN FAILED] " + e.getMessage());
-            System.out.println("If you are not yet registered, select the Registration option from the main menu.");
+            Print.println("\n[LOGIN FAILED] " + e.getMessage());
+            Print.println("If you are not yet registered, select the Registration option from the main menu.");
             stateMachine.setState(new InitialState(stateMachine));
         }
         catch (WrongCredentialsException e) {
-            System.out.println("\n" + e.getMessage());
+            Print.println("\n" + e.getMessage());
             stateMachine.setState(new InitialState(stateMachine));
         }
     }

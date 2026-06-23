@@ -1,5 +1,6 @@
 package tutorapplication.cli;
 
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachine;
 import tutorapplication.pattern.InitialState;
@@ -15,11 +16,11 @@ public class TutorHomeCLI extends AbstractState {
     @Override
     public void display() {
         printHeader("Tutor Homepage");
-        System.out.println("Welcome, Tutor!");
-        System.out.println("1) Manage availability (Set day, time and price)");
-        System.out.println("2) View booking requests");
-        System.out.println("3) Logout");
-        System.out.print("Select an option: ");
+        Print.println("Welcome, Tutor!");
+        Print.println("1) Manage availability (Set day, time and price)");
+        Print.println("2) View booking requests");
+        Print.println("3) Logout");
+        Print.print("Select an option: ");
     }
 
     @Override
@@ -29,19 +30,19 @@ public class TutorHomeCLI extends AbstractState {
         }
         switch (input) {
             case "1":
-                System.out.println("Navigating to tutor profile management...");
+                Print.println("Navigating to tutor profile management...");
                 stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
                 break;
             case "2":
-                System.out.println("Loading pending requests...");
+                Print.println("Loading pending requests...");
                 stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
                 break;
             case "3":
-                System.out.println("Logging out...");
+                Print.println("Logging out...");
                 stateMachine.setState(new InitialState(stateMachine));
                 break;
             default:
-                System.out.println("Invalid option.");
+                Print.println("Invalid option.");
                 break;
         }
     }

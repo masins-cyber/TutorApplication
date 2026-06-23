@@ -4,6 +4,7 @@ import tutorapplication.bean.BookingBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.model.Lesson;
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachine;
 
@@ -29,22 +30,22 @@ public class ConfirmBookingCLI extends AbstractState {
         printHeader("Confirm Booking");
 
         if(this.lesson == null) {
-            System.out.println("[ERROR] The requested lesson does not exist or has been removed.");
+            Print.println("[ERROR] The requested lesson does not exist or has been removed.");
             stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
             return;
         }
 
-        System.out.println("Here is the summary of the lesson you selected:");
-        System.out.println("-------------------------------------------------");
-        System.out.println("Lesson Id : #" + lesson.getId());
-        System.out.println("Subject   : " + lesson.getSubject().toUpperCase());
-        System.out.println("Day     : " + lesson.getDate().toUpperCase());
-        System.out.println("Time     : " + lesson.getTime());
-        System.out.println("Price    : " + lesson.getPrice() + "€");
-        System.out.println("Tutor's email    : " + lesson.getTutorEmail());
-        System.out.println("-------------------------------------------------");
+        Print.println("Here is the summary of the lesson you selected:");
+        Print.println("-------------------------------------------------");
+        Print.println("Lesson Id : #" + lesson.getId());
+        Print.println("Subject   : " + lesson.getSubject().toUpperCase());
+        Print.println("Day     : " + lesson.getDate().toUpperCase());
+        Print.println("Time     : " + lesson.getTime());
+        Print.println("Price    : " + lesson.getPrice() + "€");
+        Print.println("Tutor's email    : " + lesson.getTutorEmail());
+        Print.println("-------------------------------------------------");
 
-        System.out.print("Do you want to definitively confirm your booking? (yes/no): ");
+        Print.print("Do you want to definitively confirm your booking? (yes/no): ");
 
         String choice = scanner.nextLine().trim().toLowerCase();
         if (choice.equals("yes") || choice.equals("y")) {
@@ -57,23 +58,23 @@ public class ConfirmBookingCLI extends AbstractState {
                 int bookingId = controller.bookLesson(bookingBean);
 
                 if (bookingId != -1) {
-                    System.out.println("\n================================");
-                    System.out.println("[RECEIPT] BOOKING CONFIRMED WITH ID: #" + bookingId);
-                    System.out.println("Current booking status: 'booked'");
-                    System.out.println("================================");
+                    Print.println("\n================================");
+                    Print.println("[RECEIPT] BOOKING CONFIRMED WITH ID: #" + bookingId);
+                    Print.println("Current booking status: 'booked'");
+                    Print.println("================================");
                 }
                 else {
-                    System.out.println("\n[CRITICAL ERROR] Error saving the reservation in the database.");
+                    Print.println("\n[CRITICAL ERROR] Error saving the reservation in the database.");
                 }
             }
             catch (LessonAlreadyBookedException e) {
-                System.out.println("\n=================================================");
-                System.out.println("[BOOKING FAILED] " + e.getMessage());
-                System.out.println("=================================================");
+                Print.println("\n=================================================");
+                Print.println("[BOOKING FAILED] " + e.getMessage());
+                Print.println("=================================================");
             }
         }
         else {
-            System.out.println("\n[ADVICE] Reservation canceled by student.");
+            Print.println("\n[ADVICE] Reservation canceled by student.");
         }
         stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
     }

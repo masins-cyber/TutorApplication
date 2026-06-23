@@ -4,6 +4,7 @@ import tutorapplication.bean.UserBean;
 import tutorapplication.controller.RegistrationController;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.InvalidEmailException;
+import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.InitialState;
 import tutorapplication.pattern.StateMachine;
@@ -23,20 +24,20 @@ public class RegistrationCLI extends AbstractState {
 
         UserBean userBean = new UserBean();
 
-        System.out.print("Email: ");
+        Print.print("Email: ");
         userBean.setEmail(scanner.nextLine());
-        System.out.print("Password: ");
+        Print.print("Password: ");
         userBean.setPassword(scanner.nextLine());
-        System.out.print("Name: ");
+        Print.print("Name: ");
         userBean.setName(scanner.nextLine());
-        System.out.print("Surname: ");
+        Print.print("Surname: ");
         userBean.setSurname(scanner.nextLine());
-        System.out.print("Role (STUDENT/TUTOR): ");
+        Print.print("Role (STUDENT/TUTOR): ");
         String role = scanner.nextLine().toUpperCase();
         userBean.setRole(role);
 
         if("STUDENT".equals(role)) {
-            System.out.print("Student ID: ");
+            Print.print("Student ID: ");
             userBean.setStudentId(scanner.nextLine());
         }
 
@@ -46,23 +47,23 @@ public class RegistrationCLI extends AbstractState {
             boolean success = registrationController.register(userBean);
 
             if (success) {
-                System.out.println("\nRegistration successful!");
-                System.out.println("Now you can login.");
+                Print.println("\nRegistration successful!");
+                Print.println("Now you can login.");
             }
             else {
-                System.out.println("\nRegistration failed due to a database error. Please try again.");
+                Print.println("\nRegistration failed due to a database error. Please try again.");
             }
 
             stateMachine.setState(new InitialState(stateMachine));
         }
         catch (InvalidEmailException e) {
-            System.out.println("\n" + e.getMessage());
-            System.out.println("Please enter a valid email address.");
+            Print.println("\n" + e.getMessage());
+            Print.println("Please enter a valid email address.");
             stateMachine.setState(new RegistrationCLI(stateMachine));
         }
         catch (EmailAlreadyInUseException e) {
-            System.out.println("\n" + e.getMessage());
-            System.out.println("Please try again with a different email address.");
+            Print.println("\n" + e.getMessage());
+            Print.println("Please try again with a different email address.");
             stateMachine.setState(new RegistrationCLI(stateMachine));
         }
     }
