@@ -26,26 +26,13 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         List<Booking> pendingBookings = bookingController.getPendingBookings(tutorEmail);
 
         if (pendingBookings.isEmpty()) {
-            Print.println("\nYou have no reservations waiting for approval.");
-            Print.println("Press ENTER to return to Home.");
-            new Scanner(System.in).nextLine();
-            goBack(context);
+            handleNoBookings(context);
             return;
         }
 
         printHeader("Approvals");
         Print.println("\nHere are the booking requests for your lessons:");
-
-        for (Booking b : pendingBookings) {
-            Lesson l = bookingController.getLessonDetails(b.getId());
-            Print.println("-------------------------------------------------");
-            Print.println("Booking Reference ID: #" + b.getBookingId());
-            Print.println("Student Email: " + b.getStudentEmail());
-            if (l != null) {
-                Print.println("Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime());
-            }
-            Print.println("-------------------------------------------------");
-        }
+        printPendingBookingsSummary(pendingBookings);
 
         Scanner scanner = new Scanner(System.in);
         Print.print("Enter the Reference ID of the booking you want to process (or '0' to go back): ");
@@ -56,22 +43,39 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             return;
         }
 
+        processTutorInput(context, input, pendingBookings, tutorEmail, scanner);
+    }
+
+    private void handleNoBookings(StateMachineImpl context) {
+        Print.println("\nYou have no reservations waiting for approval.");
+        Print.println("Press ENTER to return to Home.");
+        new Scanner(System.in).nextLine();
+        goBack(context);
+    }
+
+    private void printPendingBookingsSummary(List<Booking> pendingBookings) {
+        for (Booking b : pendingBookings) {
+            Lesson l = bookingController.getLessonDetails(b.getId());
+            Print.println("-------------------------------------------------");
+            Print.println("Booking Reference ID: #" + b.getBookingId());
+            Print.println("Student Email: " + b.getStudentEmail());
+            if (l != null) {
+                Print.println("Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime());
+            }
+            Print.println("-------------------------------------------------");
+        }
+    }
+
+    private void processTutorInput(StateMachineImpl context, String input, List<Booking> pendingBookings, String tutorEmail, Scanner scanner) {
         int targetBookingId;
         try {
             targetBookingId = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Print.println("[ERROR] Invalid ID format.");
             return;
         }
 
-        Booking selectedBooking = null;
-        for (Booking b : pendingBookings) {
-            if (b.getBookingId() == targetBookingId) {
-                selectedBooking = b;
-                break;
-            }
-        }
-
+        Booking selectedBooking = findBookingById(pendingBookings, targetBookingId);
         if (selectedBooking == null) {
             Print.println("[ERROR] Reference ID not found.");
             return;
@@ -85,6 +89,19 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             return;
         }
 
+        executeDecision(context, selectedBooking, decision, tutorEmail);
+    }
+
+    private Booking findBookingById(List<Booking> pendingBookings, int targetBookingId) {
+        for (Booking b : pendingBookings) {
+            if (b.getBookingId() == targetBookingId) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    private void executeDecision(StateMachineImpl context, Booking selectedBooking, String decision, String tutorEmail) {
         try {
             boolean success = bookingController.processTutorDecision(selectedBooking.getBookingId(), selectedBooking.getId(), decision);
             if (success) {
@@ -95,12 +112,10 @@ public class ConfirmBookingTutorCLI extends AbstractState {
                     Print.println("[INFO] The lesson is available again for other students.");
                 }
                 Print.println("=================================================");
-            }
-            else {
+            } else {
                 Print.println("\n[ERROR] Error updating database.");
             }
-        }
-        catch (UserNotPresentException e) {
+        } catch (UserNotPresentException e) {
             handleSessionError(context, e, tutorEmail);
         }
     }
@@ -118,4 +133,3 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         }
     }
 }
-

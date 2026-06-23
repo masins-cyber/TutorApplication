@@ -38,7 +38,7 @@ public class CancelBookingCLI extends AbstractState {
         int targetBookingId;
         try {
             targetBookingId = Integer.parseInt(rawInput);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Print.errorPrint("[ERROR] Invalid ID format.");
             return;
         }

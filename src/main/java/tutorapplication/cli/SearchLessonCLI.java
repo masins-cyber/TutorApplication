@@ -43,7 +43,7 @@ public class SearchLessonCLI extends AbstractState {
             try {
                 double price = Double.parseDouble(priceStr);
                 searchBean.setMaxPrice(price);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException _) {
                 Print.println("\n[ERROR] Invalid price format! Budget set to maximum default.");
                 searchBean.setMaxPrice(999.0);
             }

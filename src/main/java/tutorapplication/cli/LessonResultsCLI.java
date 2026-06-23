@@ -30,7 +30,8 @@ public class LessonResultsCLI extends AbstractState {
                     int id = Integer.parseInt(scanner.nextLine().trim());
                     Print.println("Getting lesson with ID " + id);
                     goNext(context, new ConfirmBookingCLI(id));
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException _) {
                     Print.println("\n[ERROR] Insert a valid Id number!");
                 }
                 break;
