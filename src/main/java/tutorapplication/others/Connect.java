@@ -33,13 +33,7 @@ public class Connect {
         try {
             if (this.conn == null || this.conn.isClosed()) {
                 getInfo();
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                }
-                catch (ClassNotFoundException e) {
-                    logger.log(Level.SEVERE,"MySQL JDBC Driver not found in classpath: ", e);
-                }
+                loadDriver();
                 this.conn = DriverManager.getConnection(jdbc, user, password);
             }
         }
@@ -47,6 +41,15 @@ public class Connect {
             logger.log(Level.SEVERE,"Error in Connect.java retrieving connection: %s", e);
         }
         return this.conn;
+    }
+
+    private void loadDriver() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "MySQL JDBC Driver not found in classpath", e);
+        }
     }
 
     private void getInfo() {
