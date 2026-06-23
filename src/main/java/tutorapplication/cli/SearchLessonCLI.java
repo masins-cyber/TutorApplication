@@ -6,30 +6,28 @@ import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class SearchLessonCLI extends AbstractState {
-    private final Scanner scanner = new Scanner(System.in);
-    private final String studentEmail;
-
-    public SearchLessonCLI(StateMachine stateMachine, String email) {
-        super(stateMachine);
-        this.studentEmail = email;
-    }
 
     @Override
-    public void display() {
-        printHeader("Search Lesson");
-        Print.println("Fill in the filters to find a tutor.");
+    public void action(StateMachineImpl context) {
+        display();
 
+        Scanner scanner = new Scanner(System.in);
         SearchLessonBean searchBean = new SearchLessonBean();
 
-        Print.print("Subject you're searching for: ");
-        searchBean.setSubject(scanner.nextLine().toLowerCase());
+        Print.print("Subject you're searching for (or leave empty/write '0' to go back): ");
+        String subject = scanner.nextLine().trim();
+
+        if (subject.equals("0")) {
+            goBack(context);
+            return;
+        }
+        searchBean.setSubject(subject.toLowerCase());
 
         Print.print("Preferred day (Click enter for whatever day): ");
         searchBean.setDay(scanner.nextLine().toLowerCase());
@@ -38,16 +36,14 @@ public class SearchLessonCLI extends AbstractState {
         searchBean.setTimeSlot(scanner.nextLine());
 
         Print.print("Your budget: ");
-        String priceStr = scanner.nextLine();
+        String priceStr = scanner.nextLine().trim();
         if (priceStr.isEmpty()) {
             searchBean.setMaxPrice(999.0);
-        }
-        else {
+        } else {
             try {
                 double price = Double.parseDouble(priceStr);
                 searchBean.setMaxPrice(price);
-            }
-            catch (NumberFormatException _) {
+            } catch (NumberFormatException e) {
                 Print.println("\n[ERROR] Invalid price format! Budget set to maximum default.");
                 searchBean.setMaxPrice(999.0);
             }
@@ -56,17 +52,23 @@ public class SearchLessonCLI extends AbstractState {
         BookingController controller = new BookingController();
         try {
             List<Lesson> foundLessons = controller.searchLessons(searchBean);
-
             Print.println("\n[SUCCESS] Results found!");
-            stateMachine.setState(new LessonResultsCLI(stateMachine, foundLessons, this.studentEmail));
+
+            goNext(context, new LessonResultsCLI(foundLessons));
+
         }
         catch (LessonsNotFoundException e) {
             Print.println("\n=================================================");
             Print.println("[INFO] " + e.getMessage());
             Print.println("[NOTICE] Returning to the student home menu.");
             Print.println("=================================================");
-            stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
+            goBack(context);
         }
     }
-}
 
+    @Override
+    public void display() {
+        printHeader("Search Lesson");
+        Print.println("Fill in the filters to find a tutor.");
+    }
+}

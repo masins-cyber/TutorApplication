@@ -4,43 +4,46 @@ import tutorapplication.controller.BookingController;
 import tutorapplication.model.Booking;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class CancelBookingCLI extends AbstractState {
 
-    private final String studentEmail;
     private final BookingController bookingController;
     private final List<Booking> myBookings;
 
-    public CancelBookingCLI(StateMachine stateMachine, String studentEmail, List<Booking> myBookings) {
-        super(stateMachine);
-        this.studentEmail = studentEmail;
+    public CancelBookingCLI(List<Booking> myBookings) {
+        super();
         this.bookingController = new BookingController();
         this.myBookings = myBookings;
     }
 
     @Override
-    public void display() {
+    public void action(StateMachineImpl context) {
         printHeader("Cancel Booking");
         Print.print("Enter the ID of the booking you want to delete (or '0' to go back): ");
-    }
 
-    @Override
-    public void handleInput(String input) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
         String rawInput = input.trim();
 
         if (rawInput.equals("0")) {
             Print.println("Going back to the booking page...");
-            stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
+            goBack(context);
             return;
         }
 
-        int targetBookingId = Integer.parseInt(rawInput);
-        Booking selectedBooking = null;
+        int targetBookingId;
+        try {
+            targetBookingId = Integer.parseInt(rawInput);
+        } catch (NumberFormatException e) {
+            Print.errorPrint("[ERROR] Invalid ID format.");
+            return;
+        }
 
+        Booking selectedBooking = null;
         for (int i = 0; i < myBookings.size(); i++) {
             Booking b = myBookings.get(i);
             if (b.getBookingId() == targetBookingId) {
@@ -51,17 +54,15 @@ public class CancelBookingCLI extends AbstractState {
 
         if (selectedBooking == null) {
             Print.errorPrint("[ERROR] Reservation ID not found in your history.");
-            stateMachine.setState(new CancelBookingCLI(stateMachine, this.studentEmail, this.myBookings));
             return;
         }
 
         if (selectedBooking.getStatus().equalsIgnoreCase("rejected")) {
             Print.errorPrint("[ERROR] This booking has already been rejected by the tutor, there is no need to cancel it.");
-            stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
+            goBack(context);
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
         Print.print("Are you sure you want to cancel your reservation #" + targetBookingId + "? (yes/no): ");
         String confirm = scanner.nextLine().trim().toLowerCase();
 
@@ -81,7 +82,6 @@ public class CancelBookingCLI extends AbstractState {
         else {
             Print.println("\n[NOTICE] Operation cancelled. The reservation remains unchanged.");
         }
-        stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
+        goBack(context);
     }
 }
-

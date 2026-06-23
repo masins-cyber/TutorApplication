@@ -6,111 +6,82 @@ import tutorapplication.model.Booking;
 import tutorapplication.model.Lesson;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.InitialState;
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 import tutorapplication.others.Print;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ConfirmBookingTutorCLI extends AbstractState {
-    private final String tutorEmail;
     private final BookingController bookingController;
-    private final List<Booking> pendingBookings;
 
-    public ConfirmBookingTutorCLI(StateMachine stateMachine, String tutorEmail) {
-        super(stateMachine);
-        this.tutorEmail = tutorEmail;
+    public ConfirmBookingTutorCLI() {
+        super();
         this.bookingController = new BookingController();
-        this.pendingBookings = bookingController.getPendingBookings(tutorEmail);
     }
 
     @Override
-    public void display() {
-        printHeader("Approvals");
+    public void action(StateMachineImpl context) {
+        String tutorEmail = context.getSessionUser().getEmail();
+        List<Booking> pendingBookings = bookingController.getPendingBookings(tutorEmail);
+
         if (pendingBookings.isEmpty()) {
             Print.println("\nYou have no reservations waiting for approval.");
             Print.println("Press ENTER to return to Home.");
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();
-            stateMachine.setState(new TutorHomeCLI(stateMachine, this.tutorEmail));
+            new Scanner(System.in).nextLine();
+            goBack(context);
             return;
         }
 
+        printHeader("Approvals");
         Print.println("\nHere are the booking requests for your lessons:");
-        for (int i = 0; i < pendingBookings.size(); i++) {
-            Booking b = pendingBookings.get(i);
+
+        for (Booking b : pendingBookings) {
             Lesson l = bookingController.getLessonDetails(b.getId());
-            Print.println("----------------------------------------");
-            Print.println(" RESERVATION ID: #" + b.getBookingId());
-            Print.println("   Student: " + b.getStudentEmail());
+            Print.println("-------------------------------------------------");
+            Print.println("Booking Reference ID: #" + b.getBookingId());
+            Print.println("Student Email: " + b.getStudentEmail());
             if (l != null) {
-                Print.println("   Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime());
+                Print.println("Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime());
             }
-            Print.println("   Actual state: [" + b.getStatus() + "]");
+            Print.println("-------------------------------------------------");
         }
 
-        Print.println("\nOPTIONS:");
-        Print.println("1) Manage a booking (Accept/Reject)");
-        Print.println("2) Return to Home Tutor");
-        Print.print("Select an option: ");
-    }
+        Scanner scanner = new Scanner(System.in);
+        Print.print("Enter the Reference ID of the booking you want to process (or '0' to go back): ");
+        String input = scanner.nextLine().trim();
 
-    @Override
-    public void handleInput(String input) {
-        String choice = input.trim();
-
-        if (pendingBookings.isEmpty() || choice.equals("2")) {
-            stateMachine.setState(new TutorHomeCLI(stateMachine, this.tutorEmail));
+        if (input.equals("0")) {
+            goBack(context);
             return;
         }
-
-        if (choice.equals("1")) {
-            processSelection();
-        } else {
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
-        }
-    }
-
-    private void processSelection() {
-        Scanner scanner = new Scanner(System.in);
-        Print.print("\nEnter the booking ID you want to manage: ");
 
         int targetBookingId;
         try {
-            targetBookingId = Integer.parseInt(scanner.nextLine().trim());
-        }
-        catch (NumberFormatException _) {
-            Print.println("\n[ERROR] Invalid input! You must insert a valid numeric ID.");
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
+            targetBookingId = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            Print.println("[ERROR] Invalid ID format.");
             return;
         }
 
-        Booking selectedBooking = findBookingById(targetBookingId);
-        if (selectedBooking == null) {
-            Print.println("[ERROR] Booking ID invalid or not your responsibility.");
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
-            return;
-        }
-
-        Print.print("Do you want to ACCEPT or REJECT the booking? (accept/reject): ");
-        String decision = scanner.nextLine().trim().toLowerCase();
-        recordDecision(selectedBooking, decision);
-    }
-
-    private Booking findBookingById(int targetBookingId) {
-        for (int i = 0; i < pendingBookings.size(); i++) {
-            Booking b = pendingBookings.get(i);
+        Booking selectedBooking = null;
+        for (Booking b : pendingBookings) {
             if (b.getBookingId() == targetBookingId) {
-                return b;
+                selectedBooking = b;
+                break;
             }
         }
-        return null;
-    }
 
-    private void recordDecision(Booking selectedBooking, String decision) {
+        if (selectedBooking == null) {
+            Print.println("[ERROR] Reference ID not found.");
+            return;
+        }
+
+        Print.print("Type 'accept' to approve or 'reject' to deny this booking: ");
+        String decision = scanner.nextLine().trim().toLowerCase();
+
         if (!decision.equals("accept") && !decision.equals("reject")) {
-            Print.println("[NOTICE] Operation cancelled. Invalid choice.");
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
+            Print.println("[ERROR] Invalid action. You must choose 'accept' or 'reject'.");
             return;
         }
 
@@ -128,23 +99,22 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             else {
                 Print.println("\n[ERROR] Error updating database.");
             }
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
-        } catch (UserNotPresentException e) {
-            handleSessionError(e);
+        }
+        catch (UserNotPresentException e) {
+            handleSessionError(context, e, tutorEmail);
         }
     }
 
-    private void handleSessionError(UserNotPresentException e) {
+    private void handleSessionError(StateMachineImpl context, UserNotPresentException e, String tutorEmail) {
         Print.println("\n=================================================");
         Print.println(e.getMessage());
 
-        if (e.getMessage().contains(this.tutorEmail)) {
+        if (e.getMessage().contains(tutorEmail)) {
             Print.println("[CRITICAL ALERT] Session invalid. Your Tutor account is no longer present in the database.");
             Print.println("[INFO] You will be logged out for security purposes.");
             Print.println("=================================================");
-            stateMachine.setState(new InitialState(stateMachine));
-        } else {
-            stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
+            context.setSessionUser(null);
+            goNext(context, new InitialState());
         }
     }
 }

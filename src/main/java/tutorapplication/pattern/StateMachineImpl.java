@@ -1,45 +1,63 @@
 package tutorapplication.pattern;
 
-import tutorapplication.others.Print;
-
-import java.util.Scanner;
+import tutorapplication.bean.LoginBean;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class StateMachineImpl implements StateMachine {
+    private final Deque<AbstractState> stateHistory;
     private AbstractState currentState;
-    private final Scanner scanner = new Scanner(System.in);
+    private LoginBean sessionUser;
     private boolean isRunning = true;
 
     public StateMachineImpl() {
-        this.currentState = new InitialState(this);
+        this.stateHistory = new ArrayDeque<>();
+        this.currentState = new InitialState();
     }
 
     @Override
     public void run() {
+        this.currentState.entry(this);
         while (isRunning) {
-            AbstractState stateBeforeDisplay = currentState;
-
-            currentState.display();
-
-            if(stateBeforeDisplay != currentState) {
-                continue;
-            }
-
-            String input = scanner.nextLine();
-
-            if (input.equalsIgnoreCase("exit")) {
-                isRunning = false;
-                Print.println("Closing application...");
-            }
-            else {
-                currentState.handleInput(input);
-            }
+            goNext();
         }
     }
 
     @Override
-    public void setState(AbstractState newState) {
-        this.currentState = newState;
+    public void goNext() {
+        if (currentState != null) {
+            this.currentState.action(this);
+        }
     }
 
-}
+    @Override
+    public void goBack() {
+        if (!stateHistory.isEmpty()) {
+            this.currentState.exit(this);
+            this.currentState = stateHistory.pop();
+            this.currentState.entry(this);
+        }
+    }
 
+    @Override
+    public void transition(AbstractState nextState) {
+        if (currentState != null) {
+            currentState.exit(this);
+            stateHistory.push(currentState);
+        }
+        currentState = nextState;
+        currentState.entry(this);
+    }
+
+    public void terminate() {
+        this.isRunning = false;
+    }
+
+    public LoginBean getSessionUser() {
+        return sessionUser;
+    }
+
+    public void setSessionUser(LoginBean sessionUser) {
+        this.sessionUser = sessionUser;
+    }
+}

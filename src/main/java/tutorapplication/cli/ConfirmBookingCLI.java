@@ -6,53 +6,41 @@ import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 
 import java.util.Scanner;
 
 public class ConfirmBookingCLI extends AbstractState {
-    private final int id;
-    private final Scanner scanner = new Scanner(System.in);
-    private final String studentEmail;
+    private final int lessonId;
     private final BookingController controller;
     private final Lesson lesson;
 
-    public ConfirmBookingCLI(StateMachine stateMachine, int id,  String studentEmail) {
-        super(stateMachine);
-        this.id = id;
-        this.studentEmail = studentEmail;
+    public ConfirmBookingCLI(int lessonId) {
+        super();
+        this.lessonId = lessonId;
         this.controller = new BookingController();
-        this.lesson = controller.getLessonDetails(id);
+        this.lesson = controller.getLessonDetails(lessonId);
     }
 
     @Override
-    public void display() {
-        printHeader("Confirm Booking");
-
-        if(this.lesson == null) {
+    public void action(StateMachineImpl context) {
+        if (this.lesson == null) {
             Print.println("[ERROR] The requested lesson does not exist or has been removed.");
-            stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
+            goBack(context);
             return;
         }
 
-        Print.println("Here is the summary of the lesson you selected:");
-        Print.println("-------------------------------------------------");
-        Print.println("Lesson Id : #" + lesson.getId());
-        Print.println("Subject   : " + lesson.getSubject().toUpperCase());
-        Print.println("Day     : " + lesson.getDate().toUpperCase());
-        Print.println("Time     : " + lesson.getTime());
-        Print.println("Price    : " + lesson.getPrice() + "€");
-        Print.println("Tutor's email    : " + lesson.getTutorEmail());
-        Print.println("-------------------------------------------------");
+        display();
 
-        Print.print("Do you want to definitively confirm your booking? (yes/no): ");
-
+        Scanner scanner = new Scanner(System.in);
         String choice = scanner.nextLine().trim().toLowerCase();
-        if (choice.equals("yes") || choice.equals("y")) {
 
+        if (choice.equals("yes") || choice.equals("y")) {
             BookingBean bookingBean = new BookingBean();
-            bookingBean.setId(this.id);
-            bookingBean.setStudentEmail(this.studentEmail);
+            bookingBean.setId(this.lessonId);
+
+            String studentEmail = context.getSessionUser().getEmail();
+            bookingBean.setStudentEmail(studentEmail);
 
             try {
                 int bookingId = controller.bookLesson(bookingBean);
@@ -76,7 +64,22 @@ public class ConfirmBookingCLI extends AbstractState {
         else {
             Print.println("\n[ADVICE] Reservation canceled by student.");
         }
-        stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
+
+        goBack(context);
+    }
+
+    @Override
+    public void display() {
+        printHeader("Confirm Booking");
+        Print.println("Here is the summary of the lesson you selected:");
+        Print.println("-------------------------------------------------");
+        Print.println("Lesson Id : #" + lesson.getId());
+        Print.println("Subject   : " + lesson.getSubject());
+        Print.println("Tutor     : " + lesson.getTutorEmail());
+        Print.println("Day       : " + lesson.getDate() + " | Time: " + lesson.getTime());
+        Print.println("Price     : " + lesson.getPrice() + "€");
+        Print.println("-------------------------------------------------");
+        Print.print("Do you want to definitively confirm your booking? (yes/no): ");
     }
 }
 

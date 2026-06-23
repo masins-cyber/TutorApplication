@@ -1,7 +1,9 @@
 package tutorapplication.pattern;
 
 public interface StateMachine {
-    void setState(AbstractState newState);
+    void goNext();
+    void goBack();
+    void transition(AbstractState nextState);
     void run();
 }
 

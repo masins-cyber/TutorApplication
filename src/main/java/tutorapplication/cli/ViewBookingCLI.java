@@ -5,31 +5,29 @@ import tutorapplication.model.Booking;
 import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class ViewBookingCLI extends AbstractState {
-    private final String studentEmail;
-    private final BookingController bookingController;
-    private final List<Booking> myBookings;
-
-    public ViewBookingCLI(StateMachine stateMachine, String studentEmail) {
-        super(stateMachine);
-        this.studentEmail = studentEmail;
-        this.bookingController = new BookingController();
-        this.myBookings = bookingController.getAllStudentBookings(studentEmail);
-    }
 
     @Override
-    public void display() {
+    public void action(StateMachineImpl context) {
+        String studentEmail = context.getSessionUser().getEmail();
+        BookingController bookingController = new BookingController();
+        List<Booking> myBookings = bookingController.getAllStudentBookings(studentEmail);
+
         printHeader("My bookings");
 
-        if(myBookings.isEmpty()) {
+        if (myBookings.isEmpty()) {
             Print.println("\nYou haven't made any reservations yet.");
             Print.println("Press ENTER to return to Student Home.");
+            new Scanner(System.in).nextLine();
+            goBack(context);
             return;
         }
+
         Print.println("\nHere is the complete list of your requests:");
         for (int i = 0; i < myBookings.size(); i++) {
             Booking b = myBookings.get(i);
@@ -47,11 +45,11 @@ public class ViewBookingCLI extends AbstractState {
                 Print.println("RESERVATION MADE (Booked that is waiting for tutor): #" + b.getBookingId());
             }
             if (l != null) {
-                Print.println("   Subject: " + l.getSubject());
-                Print.println("   Tutor: " + l.getTutorEmail());
-                Print.println("   Day: " + l.getDate() + " | Time: " + l.getTime());
+                Print.println(" Subject: " + l.getSubject());
+                Print.println(" Tutor: " + l.getTutorEmail());
+                Print.println(" Day: " + l.getDate() + " | Time: " + l.getTime());
             }
-            Print.println("   Actual state: [" + b.getStatus().toUpperCase() + "]");
+            Print.println(" Actual state: [" + b.getStatus().toUpperCase() + "]");
         }
 
         Print.println("----------------------------------------");
@@ -59,30 +57,22 @@ public class ViewBookingCLI extends AbstractState {
         Print.println("1) Delete/Cancel a reservation.");
         Print.println("2) Return to Student Home.");
         Print.print("Select an option: ");
-    }
 
-    @Override
-    public void handleInput(String input) {
-        String choose = input.trim();
+        Scanner scanner = new Scanner(System.in);
+        String choose = scanner.nextLine().trim();
 
-        if (myBookings.isEmpty()) {
-            stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
-            return;
-        }
         switch (choose) {
             case "1":
                 Print.println("Going to delete the booking...");
-                stateMachine.setState(new CancelBookingCLI(stateMachine, this.studentEmail, this.myBookings));
+                goNext(context, new CancelBookingCLI(myBookings));
                 break;
             case "2":
-                Print.println("Going to the student page...");
-                stateMachine.setState(new StudentHomeCLI(stateMachine, this.studentEmail));
+                Print.println("Going back to the student page...");
+                goBack(context);
                 break;
             default:
                 Print.println("[ADVISE] Invalid option. Retry.");
-                stateMachine.setState(new ViewBookingCLI(stateMachine, this.studentEmail));
                 break;
         }
     }
 }
-

@@ -4,30 +4,23 @@ import tutorapplication.bean.SearchLessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-import tutorapplication.pattern.StateMachine;
+import tutorapplication.pattern.StateMachineImpl;
 
 import java.util.Scanner;
 
 public class InsertLessonCLI extends AbstractState {
-    private final Scanner scanner = new Scanner(System.in);
-    private final String tutorEmail;
-
-    public InsertLessonCLI(StateMachine stateMachine, String email) {
-        super(stateMachine);
-        this.tutorEmail = email;
-    }
 
     @Override
-    public void display() {
-        printHeader("Availability page");
+    public void action(StateMachineImpl context) {
+        display();
 
+        Scanner scanner = new Scanner(System.in);
         SearchLessonBean lessonBean = new SearchLessonBean();
 
         Print.print("Subject: ");
         String subject = scanner.nextLine().trim();
         if (subject.isEmpty()) {
             Print.println("\n[ERROR] Subject is mandatory! Please fill in all fields.");
-            stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;
         }
         lessonBean.setSubject(subject);
@@ -36,7 +29,6 @@ public class InsertLessonCLI extends AbstractState {
         String day = scanner.nextLine().trim().toUpperCase();
         if (day.isEmpty()) {
             Print.println("\n[ERROR] Day is mandatory! Please fill in all fields.");
-            stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;
         }
         lessonBean.setDay(day);
@@ -45,7 +37,6 @@ public class InsertLessonCLI extends AbstractState {
         String time = scanner.nextLine().trim();
         if (time.isEmpty()) {
             Print.println("\n[ERROR] Time is mandatory! Please fill in all fields.");
-            stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;
         }
         lessonBean.setTimeSlot(time);
@@ -54,29 +45,32 @@ public class InsertLessonCLI extends AbstractState {
         String priceStr = scanner.nextLine().trim();
         if (priceStr.isEmpty()) {
             Print.println("\n[ERROR] Price is mandatory! Please fill in all fields.");
-            stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;
         }
 
         try {
             double price = Double.parseDouble(priceStr);
             lessonBean.setMaxPrice(price);
-        }
-        catch (NumberFormatException _) {
+        } catch (NumberFormatException e) {
             Print.println("Error in the price format.");
-            stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;
         }
 
         BookingController bookingController = new BookingController();
-        if (bookingController.addLesson(lessonBean, this.tutorEmail)) {
+        String tutorEmail = context.getSessionUser().getEmail();
+
+        if (bookingController.addLesson(lessonBean, tutorEmail)) {
             Print.println("\n[SUCCESS] Lesson added successfully!");
         }
         else {
             Print.println("\n[ERROR] You can't insert this lesson! You already have an available lesson for the same day and time!");
         }
 
-        stateMachine.setState(new TutorHomeCLI(stateMachine, this.tutorEmail));
+        goBack(context);
+    }
+
+    @Override
+    public void display() {
+        printHeader("Availability page");
     }
 }
-

@@ -2,15 +2,38 @@ package tutorapplication.cli;
 
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
-import tutorapplication.pattern.StateMachine;
 import tutorapplication.pattern.InitialState;
+import tutorapplication.pattern.StateMachineImpl;
+
+import java.util.Scanner;
 
 public class TutorHomeCLI extends AbstractState {
-    private final String tutorEmail;
 
-    public TutorHomeCLI(StateMachine stateMachine, String email) {
-        super(stateMachine);
-        this.tutorEmail = email;
+    @Override
+    public void action(StateMachineImpl context) {
+        display();
+
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+
+        switch (input) {
+            case "1":
+                Print.println("Navigating to tutor profile management...");
+                goNext(context, new InsertLessonCLI());
+                break;
+            case "2":
+                Print.println("Loading pending requests...");
+                goNext(context, new ConfirmBookingTutorCLI());
+                break;
+            case "3":
+                Print.println("Logging out...");
+                context.setSessionUser(null);
+                goNext(context, new InitialState());
+                break;
+            default:
+                Print.println("Invalid option.");
+                break;
+        }
     }
 
     @Override
@@ -21,30 +44,6 @@ public class TutorHomeCLI extends AbstractState {
         Print.println("2) View booking requests");
         Print.println("3) Logout");
         Print.print("Select an option: ");
-    }
-
-    @Override
-    public void handleInput(String input) {
-        if (input == null || input.trim().isEmpty()) {
-            return;
-        }
-        switch (input) {
-            case "1":
-                Print.println("Navigating to tutor profile management...");
-                stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
-                break;
-            case "2":
-                Print.println("Loading pending requests...");
-                stateMachine.setState(new ConfirmBookingTutorCLI(stateMachine, this.tutorEmail));
-                break;
-            case "3":
-                Print.println("Logging out...");
-                stateMachine.setState(new InitialState(stateMachine));
-                break;
-            default:
-                Print.println("Invalid option.");
-                break;
-        }
     }
 }
 
