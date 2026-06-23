@@ -1,4 +1,4 @@
-package tutorapplication.Gui;
+package tutorapplication.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

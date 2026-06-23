@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.Hyperlink?>
-<AnchorPane prefHeight="550.0" prefWidth="850.0" style="-fx-background-color: #64DFDF;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.Gui.LessonResultsGui">
+<AnchorPane prefHeight="550.0" prefWidth="850.0" style="-fx-background-color: #64DFDF;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.gui.LessonResultsGui">
     <HBox layoutX="20.0" layoutY="25.0" prefHeight="500.0" prefWidth="810.0" spacing="20.0">
         <VBox alignment="CENTER" prefHeight="500.0" prefWidth="240.0" spacing="25.0" style="-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 10px; -fx-padding: 20px;">
 

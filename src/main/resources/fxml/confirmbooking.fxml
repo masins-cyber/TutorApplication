@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="450.0" prefWidth="650.0" style="-fx-background-color: #64DFDF;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.Gui.ConfirmBookingGui">
+<AnchorPane prefHeight="450.0" prefWidth="650.0" style="-fx-background-color: #64DFDF;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tutorapplication.gui.ConfirmBookingGui">
 
     <VBox alignment="CENTER" layoutX="100.0" layoutY="40.0" prefWidth="450.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
         <VBox alignment="CENTER" spacing="5.0">

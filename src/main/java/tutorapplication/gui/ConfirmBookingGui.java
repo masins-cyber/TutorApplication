@@ -1,4 +1,4 @@
-package tutorapplication.Gui;
+package tutorapplication.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
