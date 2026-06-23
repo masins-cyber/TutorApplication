@@ -80,7 +80,8 @@ public class Start {
             Print.println("[SYSTEM] Launching Command Line Interface...\n");
             StateMachineImpl app = new StateMachineImpl();
             app.run();
-        } else {
+        }
+        else {
             Print.println("[SYSTEM] Launching Graphical User Interface...\n");
             scanner.close();
             Application.launch(JavaFXLauncher.class);
