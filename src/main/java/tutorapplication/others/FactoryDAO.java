@@ -13,42 +13,42 @@ public class FactoryDAO {
     private FactoryDAO() {}
 
     public static UserDAO getUserDAO() {
-        String DAOType = Config.getPersistenceType();
-        if (MYSQL.equalsIgnoreCase(DAOType)) {
+        String daotype = Config.getPersistenceType();
+        if (MYSQL.equalsIgnoreCase(daotype)) {
             return new UserDAOMYSQL();
         }
-        else if (JSON.equalsIgnoreCase(DAOType)) {
+        else if (JSON.equalsIgnoreCase(daotype)) {
             return new UserDAOJSON();
         }
-        else if (MEMORY.equalsIgnoreCase(DAOType)) {
+        else if (MEMORY.equalsIgnoreCase(daotype)) {
             return new UserDAOInMemory();
         }
         return null;
     }
 
     public static LessonDAO getLessonDAO() {
-        String DAOType = Config.getPersistenceType();
-        if (MYSQL.equalsIgnoreCase(DAOType)) {
+        String daotype = Config.getPersistenceType();
+        if (MYSQL.equalsIgnoreCase(daotype)) {
             return new LessonDAOMYSQL();
         }
-        else if (MEMORY.equalsIgnoreCase(DAOType)) {
+        else if (MEMORY.equalsIgnoreCase(daotype)) {
             return new LessonDAOInMemory();
         }
-        else if (JSON.equalsIgnoreCase(DAOType)) {
+        else if (JSON.equalsIgnoreCase(daotype)) {
             return new LessonDAOInMemory();
         }
         return null;
     }
 
     public static BookingDAO getBookingDAO() {
-        String DAOType = Config.getPersistenceType();
-        if (MYSQL.equalsIgnoreCase(DAOType)) {
+        String daotype = Config.getPersistenceType();
+        if (MYSQL.equalsIgnoreCase(daotype)) {
             return new BookingDAOMYSQL();
         }
-        else if (MEMORY.equalsIgnoreCase(DAOType)) {
+        else if (MEMORY.equalsIgnoreCase(daotype)) {
             return new BookingDAOInMemory();
         }
-        else if (JSON.equalsIgnoreCase(DAOType)) {
+        else if (JSON.equalsIgnoreCase(daotype)) {
             return new BookingDAOInMemory();
         }
         return null;
