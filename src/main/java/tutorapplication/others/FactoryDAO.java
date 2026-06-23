@@ -1,8 +1,8 @@
 package tutorapplication.others;
 
-import tutorapplication.InMemory.BookingDAOInMemory;
-import tutorapplication.InMemory.LessonDAOInMemory;
-import tutorapplication.InMemory.UserDAOInMemory;
+import tutorapplication.inmemory.BookingDAOInMemory;
+import tutorapplication.inmemory.LessonDAOInMemory;
+import tutorapplication.inmemory.UserDAOInMemory;
 import tutorapplication.dao.*;
 
 public class FactoryDAO {

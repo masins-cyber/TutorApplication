@@ -11,7 +11,7 @@ import tutorapplication.others.Print;
 
 import java.util.Scanner;
 
-public class start {
+public class Start {
 
     private static final String DIVIDER = "=========================================";
 

@@ -1,4 +1,4 @@
-package tutorapplication.InMemory;
+package tutorapplication.inmemory;
 
 import tutorapplication.dao.BookingDAO;
 import tutorapplication.exception.LessonAlreadyBookedException;

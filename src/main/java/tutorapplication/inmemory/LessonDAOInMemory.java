@@ -1,4 +1,4 @@
-package tutorapplication.InMemory;
+package tutorapplication.inmemory;
 
 import tutorapplication.dao.LessonDAO;
 import tutorapplication.exception.LessonsNotFoundException;
