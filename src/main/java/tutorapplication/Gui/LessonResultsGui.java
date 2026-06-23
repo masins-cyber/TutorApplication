@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 
 public class LessonResultsGui {
     private static final Logger logger = Logger.getLogger(LessonResultsGui.class.getName());
+    private static final String SYSTEM_ERROR = "System Error";
     private String studentEmail;
 
     @FXML
@@ -96,7 +97,7 @@ public class LessonResultsGui {
 
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error moving to confirmbooking.fxml", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Unable to open booking confirmation window.");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Unable to open booking confirmation window.");
         }
     }
 
@@ -116,7 +117,7 @@ public class LessonResultsGui {
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error returning to search filters", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Unable to load search window.");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Unable to load search window.");
         }
     }
 
@@ -138,7 +139,7 @@ public class LessonResultsGui {
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error returning to student home from results", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Unable to load student home.");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Unable to load student home.");
         }
     }
 

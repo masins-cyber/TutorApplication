@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class RegistrationGui {
 
     private static final Logger logger = Logger.getLogger(RegistrationGui.class.getName());
+    private static final String STUDENT_ROLE = "Student";
 
     @FXML
     private TextField nameField;
@@ -50,7 +51,7 @@ public class RegistrationGui {
     void handleRoleSelection() {
         String selectedRole = roleComboBox.getValue();
 
-        if ("Student".equals(selectedRole)) {
+        if (STUDENT_ROLE.equals(selectedRole)) {
             studentIdContainer.setVisible(true);
             studentIdContainer.setManaged(true);
         }
@@ -67,7 +68,7 @@ public class RegistrationGui {
             showAlert(Alert.AlertType.WARNING, "Missing Fields", "Please fill in all mandatory fields.");
             return;
         }
-        if ("Student".equals(roleComboBox.getValue()) && studentIdField.getText().isBlank()) {
+        if (STUDENT_ROLE.equals(roleComboBox.getValue()) && studentIdField.getText().isBlank()) {
             showAlert(Alert.AlertType.WARNING, "Missing Student ID", "Please insert your Student ID.");
             return;
         }

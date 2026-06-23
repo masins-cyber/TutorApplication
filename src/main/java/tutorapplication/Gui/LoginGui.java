@@ -31,6 +31,7 @@ public class LoginGui {
     private Button loginButton;
 
     private final LoginController loginController = new LoginController();
+    private static final String SYSTEM_ERROR = "System Error";
     private static final Logger logger = Logger.getLogger(LoginGui.class.getName());
 
     @FXML
@@ -88,7 +89,7 @@ public class LoginGui {
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error loading tutorhomepage.fxml", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Failed to load tutor homepage.");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Failed to load tutor homepage.");
         }
     }
 
@@ -111,7 +112,7 @@ public class LoginGui {
             logger.log(Level.INFO, "Student homepage loaded successfully for: {0}", email);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error loading studenthomepage.fxml", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Failed to load Student Dashboard.");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Failed to load student homepage.");
         }
     }
 
@@ -134,7 +135,7 @@ public class LoginGui {
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error loading registration.fxml", e);
-            showAlert(Alert.AlertType.ERROR, "System Error", "Failed to load registration.fxml page");
+            showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Failed to load registration.fxml page");
         }
     }
 
