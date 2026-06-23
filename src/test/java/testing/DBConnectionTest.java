@@ -11,10 +11,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 class DBConnectionTest {
-
     @Test
     void testConnection() {
-        try {
+        assertDoesNotThrow(() -> {
             Connect connectInstance = Connect.getInstance();
             assertNotNull(connectInstance, "Connect.getInstance() returned null. Check Singleton initialization.");
 
@@ -26,10 +25,6 @@ class DBConnectionTest {
                 assertTrue(rs.next(), "The ResultSet should have at least one result.");
                 Print.println("Database Test: OK (Connection successfully established via Connect Singleton)");
             }
-        }
-        catch (Exception e) {
-            Print.errorPrint("Error during the database connection test: " + e.getMessage());
-            fail("The test failed due to an exception");
-        }
+        }, "The database connection pipeline should not raise any unexpected exceptions.");
     }
 }

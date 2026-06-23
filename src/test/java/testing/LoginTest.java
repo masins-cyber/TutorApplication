@@ -27,30 +27,21 @@ class LoginTest {
 
     @Test
     void testLoginSuccess() {
-
         LoginBean loginBean = new LoginBean();
         loginBean.setEmail("simix@gmail.com");
         loginBean.setPassword("simix");
         loginBean.setTutor(true);
 
-        try {
+        assertDoesNotThrow(() -> {
             User result = loginController.login(loginBean);
-
             assertNotNull(result, "Login failed (returned null). Please check your connection to MySQL.");
-
             assertEquals("Simone", result.getName(), "MySQL authenticated user name does not match.");
-
             Print.println("Test Login Success: OK (Authentication success on MySQL for " + result.getEmail() + ")");
-
-        }
-        catch (Exception e) {
-            fail("The test threw an unexpected exception: " + e.getMessage());
-        }
+        }, "The single login pipeline should succeed without exceptions.");
     }
 
     @Test
     void testLoginWrongCredentials() {
-
         LoginBean loginBean = new LoginBean();
         loginBean.setEmail("simix@gmail.com");
         loginBean.setPassword("simix");
@@ -75,7 +66,6 @@ class LoginTest {
 
     @Test
     void testRegistrationEmailAlreadyInUse() {
-
         RegistrationController registration = new RegistrationController();
 
         UserBean userBean = new UserBean();
@@ -104,9 +94,7 @@ class LoginTest {
         tutor.setSurname("James");
         tutor.setRole("TUTOR");
 
-        assertDoesNotThrow(() -> {
-            registration.register(tutor);
-        }, "Registration of a new instructor should be successful");
+        assertDoesNotThrow(() -> registration.register(tutor), "Registration of a new instructor should be successful");
 
         Print.println("Instructor Registration Test: OK for " + randomEmail);
     }

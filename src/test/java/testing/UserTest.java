@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserTest {
+class UserTest {
     private BookingController bookingController;
 
     @BeforeEach
@@ -76,19 +76,14 @@ public class UserTest {
         boolean lessonCreated = bookingController.addLesson(lessonBean, tutorEmail);
         assertTrue(lessonCreated, "The trial lesson must be successfully inserted into the DB.");
 
-        int realLessonId = -1;
-        try {
+        final BookingBean bookingBean = new BookingBean();
+        bookingBean.setStudentEmail(studentEmail);
+
+        assertDoesNotThrow(() -> {
             List<Lesson> lessonsFound = bookingController.searchLessons(lessonBean);
             assertFalse(lessonsFound.isEmpty(), "The lesson must be findable through filters.");
-            realLessonId = lessonsFound.getFirst().getId();
-        }
-        catch (Exception e) {
-            fail("Failure to retrieve the inserted lesson ID: " + e.getMessage());
-        }
-
-        BookingBean bookingBean = new BookingBean();
-        bookingBean.setId(realLessonId);
-        bookingBean.setStudentEmail(studentEmail);
+            bookingBean.setId(lessonsFound.getFirst().getId());
+        }, "Failure to retrieve the inserted lesson ID mapping.");
 
         assertDoesNotThrow(() -> {
             int bookingId = bookingController.bookLesson(bookingBean);
@@ -100,4 +95,3 @@ public class UserTest {
         Print.println("Duplicate Booking Test: OK (the controller successfully prevents double booking)");
     }
 }
-
