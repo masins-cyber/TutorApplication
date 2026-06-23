@@ -9,27 +9,41 @@ public class StudentHomeCLI extends AbstractState {
 
     @Override
     public void action(StateMachineImpl context) {
-
         String input = showMenuAndGetInput();
+        processStudentChoice(context, input);
+    }
 
+    private void processStudentChoice(StateMachineImpl context, String input) {
         switch (input) {
             case "1":
-                Print.println("Navigating to the lesson search...");
-                goNext(context, new SearchLessonCLI());
+                goToSearch(context);
                 break;
             case "2":
-                Print.println("Loading your bookings...");
-                goNext(context, new ViewBookingCLI());
+                goToBookings(context);
                 break;
             case "3":
-                Print.println("Logging out...");
-                context.setSessionUser(null);
-                goNext(context, new InitialState());
+                executeLogout(context);
                 break;
             default:
                 Print.println("Invalid option.");
                 break;
         }
+    }
+
+    private void goToSearch(StateMachineImpl context) {
+        Print.println("Navigating to the lesson search...");
+        goNext(context, new SearchLessonCLI());
+    }
+
+    private void goToBookings(StateMachineImpl context) {
+        Print.println("Loading your bookings...");
+        goNext(context, new ViewBookingCLI());
+    }
+
+    private void executeLogout(StateMachineImpl context) {
+        Print.println("Logging out...");
+        context.setSessionUser(null);
+        goNext(context, new InitialState());
     }
 
     @Override
@@ -42,4 +56,3 @@ public class StudentHomeCLI extends AbstractState {
         Print.print("Select an option: ");
     }
 }
-

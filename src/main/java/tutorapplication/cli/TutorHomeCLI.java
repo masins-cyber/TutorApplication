@@ -10,25 +10,40 @@ public class TutorHomeCLI extends AbstractState {
     @Override
     public void action(StateMachineImpl context) {
         String input = showMenuAndGetInput();
+        processTutorChoice(context, input);
+    }
 
+    private void processTutorChoice(StateMachineImpl context, String input) {
         switch (input) {
             case "1":
-                Print.println("Navigating to tutor profile management...");
-                goNext(context, new InsertLessonCLI());
+                manageLessons(context);
                 break;
             case "2":
-                Print.println("Loading pending requests...");
-                goNext(context, new ConfirmBookingTutorCLI());
+                viewRequests(context);
                 break;
             case "3":
-                Print.println("Logging out...");
-                context.setSessionUser(null);
-                goNext(context, new InitialState());
+                executeLogout(context);
                 break;
             default:
                 Print.println("Invalid option.");
                 break;
         }
+    }
+
+    private void manageLessons(StateMachineImpl context) {
+        Print.println("Navigating to tutor profile management...");
+        goNext(context, new InsertLessonCLI());
+    }
+
+    private void viewRequests(StateMachineImpl context) {
+        Print.println("Loading pending requests...");
+        goNext(context, new ConfirmBookingTutorCLI());
+    }
+
+    private void executeLogout(StateMachineImpl context) {
+        Print.println("Logging out...");
+        context.setSessionUser(null);
+        goNext(context, new InitialState());
     }
 
     @Override
@@ -41,4 +56,3 @@ public class TutorHomeCLI extends AbstractState {
         Print.print("Select an option: ");
     }
 }
-
