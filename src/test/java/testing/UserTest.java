@@ -15,13 +15,10 @@ import tutorapplication.others.Config;
 import tutorapplication.others.Print;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
-    private static final Logger logger = Logger.getLogger(UserTest.class.getName());
     private BookingController bookingController;
 
     @BeforeEach
@@ -64,10 +61,10 @@ public class UserTest {
             registrationController.register(tutorBean);
         }
         catch (EmailAlreadyInUseException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            Print.errorPrint(e.getMessage());
         }
         catch (Exception e) {
-            logger.log(Level.WARNING, "Setup Tutor warning: {0}", e.getMessage());
+            Print.errorPrint("Setup Tutor warning: " + e.getMessage());
         }
 
         SearchLessonBean lessonBean = new SearchLessonBean();

@@ -116,10 +116,8 @@ public class UserDAOJSON implements UserDAO {
         List<User> db = loadUsersFromFile();
         for (int i = 0; i < db.size(); i++) {
             User u = db.get(i);
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                if (PasswordHasher.checkPassword(password, u.getPassword())) {
-                    return u;
-                }
+            if (u.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, u.getPassword())) {
+                return u;
             }
         }
         throw new WrongCredentialsException();

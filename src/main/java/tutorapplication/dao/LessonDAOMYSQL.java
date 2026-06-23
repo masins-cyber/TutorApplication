@@ -32,7 +32,7 @@ public class LessonDAOMYSQL implements LessonDAO {
         }
         catch (SQLException e) {
             if(e.getErrorCode() == 1062) {
-                logger.log(Level.WARNING, "Attempted to insert a duplicate lesson slot for tutor: " + lesson.getTutorEmail());
+                logger.log(Level.WARNING, "Attempted to insert a duplicate lesson slot for tutor: {0}", lesson.getTutorEmail());
             }
             else {
                 logger.log(Level.SEVERE, "Database error during lesson persistence process", e);
@@ -46,7 +46,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
         List<Lesson> lessons = new ArrayList<>();
 
-        String query = "SELECT * FROM lessons WHERE LOWER(subject) = LOWER(?) " + "AND (LOWER(day) = LOWER(?) OR ? = '') " + "AND (time_slot = ? OR ? = '') " + "AND price <= ? AND available = 1";
+        String query = "SELECT id, subject, day, time_slot, price, tutor_email, available FROM lessons WHERE LOWER(subject) = LOWER(?) " + "AND (LOWER(day) = LOWER(?) OR ? = '') " + "AND (time_slot = ? OR ? = '') " + "AND price <= ? AND available = 1";
 
         try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, subject);
@@ -76,7 +76,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
     public Lesson findLessonById(int lessonId) {
 
-        String query = "SELECT * FROM lessons WHERE id = ?";
+        String query = "SELECT id, subject, day, time_slot, price, tutor_email, available FROM lessons WHERE id = ?";
 
         try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -88,7 +88,7 @@ public class LessonDAOMYSQL implements LessonDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Database error while looking up lesson with ID: " + lessonId, e);
+            logger.log(Level.SEVERE, "Database error while looking up lesson with ID: {0}", lessonId);
         }
         return null;
     }

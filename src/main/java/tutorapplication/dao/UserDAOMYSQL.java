@@ -18,7 +18,7 @@ public class UserDAOMYSQL implements UserDAO {
 
     @Override
     public User findUserByEmailAndPassword(String email, String password) throws WrongCredentialsException {
-        String query = "SELECT * FROM users WHERE email = ?";
+        String query = "SELECT email, password, name, surname, role, student_id FROM users WHERE email = ?";
         try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -42,7 +42,7 @@ public class UserDAOMYSQL implements UserDAO {
 
     @Override
     public User findUserByEmail(String email) throws UserNotPresentException {
-        String query = "SELECT * FROM users WHERE email = ?";
+        String query = "SELECT email, password, name, surname, role, student_id FROM users WHERE email = ?";
         try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();

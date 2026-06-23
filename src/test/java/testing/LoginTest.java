@@ -14,13 +14,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tutorapplication.others.Print;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoginTest {
-    private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     private LoginController loginController;
 
     @BeforeEach
@@ -48,7 +44,6 @@ class LoginTest {
 
         }
         catch (Exception e) {
-            logger.log(Level.SEVERE, "Critical exception encountered during testing: {0}", e.getMessage());
             fail("The test threw an unexpected exception: " + e.getMessage());
         }
     }

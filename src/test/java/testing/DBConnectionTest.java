@@ -9,12 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class DBConnectionTest {
-
-    private static final Logger logger = Logger.getLogger(DBConnectionTest.class.getName());
 
     @Test
     void testConnection() {
@@ -32,8 +28,8 @@ class DBConnectionTest {
             }
         }
         catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during the database connection test: {0}", e.getMessage());
-            fail("The test failed due to an exception: " + e.getMessage());
+            Print.errorPrint("Error during the database connection test: " + e.getMessage());
+            fail("The test failed due to an exception");
         }
     }
 }

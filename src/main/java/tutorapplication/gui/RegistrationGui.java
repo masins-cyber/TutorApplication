@@ -87,7 +87,7 @@ public class RegistrationGui {
             boolean success = coreController.register(userBean);
 
             if (success) {
-                logger.log(Level.INFO, "Registration successful for user: ", userBean.getEmail());
+                logger.log(Level.INFO, "Registration successful for user: {0}", userBean.getEmail());
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Registration completed! Back to Login.");
                 changeScreen();
             } else {

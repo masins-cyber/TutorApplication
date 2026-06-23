@@ -17,10 +17,8 @@ public class UserDAOInMemory implements UserDAO {
     public User findUserByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         for (int i = 0; i < usersTable.size(); i++) {
             User u = usersTable.get(i);
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                if (PasswordHasher.checkPassword(password, u.getPassword())) {
-                    return u;
-                }
+            if (u.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, u.getPassword())) {
+                return u;
             }
         }
         throw new WrongCredentialsException();
