@@ -2,7 +2,11 @@ package tutorapplication.pattern;
 
 import tutorapplication.others.Print;
 
+import java.util.Scanner;
+
 public abstract class AbstractState {
+
+    private final Scanner scanner = new Scanner(System.in);
 
     protected AbstractState() {}
 
@@ -19,6 +23,11 @@ public abstract class AbstractState {
 
     public abstract void action(StateMachineImpl context);
     public void display() {}
+
+    protected String showMenuAndGetInput() {
+        display();
+        return scanner.nextLine().trim();
+    }
 
     public void printHeader(String title) {
         Print.println("\n============");

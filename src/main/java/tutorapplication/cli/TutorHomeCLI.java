@@ -5,16 +5,11 @@ import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.InitialState;
 import tutorapplication.pattern.StateMachineImpl;
 
-import java.util.Scanner;
-
 public class TutorHomeCLI extends AbstractState {
 
     @Override
     public void action(StateMachineImpl context) {
-        display();
-
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim();
+        String input = showMenuAndGetInput();
 
         switch (input) {
             case "1":
