@@ -60,7 +60,8 @@ public class InsertLessonCLI extends AbstractState {
         try {
             double price = Double.parseDouble(priceStr);
             lessonBean.setMaxPrice(price);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             System.out.println("Error in the price format.");
             stateMachine.setState(new InsertLessonCLI(stateMachine, this.tutorEmail));
             return;

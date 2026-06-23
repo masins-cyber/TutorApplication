@@ -56,7 +56,7 @@ public class Connect {
 
             this.jdbc = prop.getProperty("JDBC_URL");
             this.user = prop.getProperty("USER");
-            this.password = prop.getProperty("PASSWORD");
+            this.password = prop.getProperty("db.pkn_val");
 
         } catch (IOException e) {
             logger.log(Level.SEVERE,"Failed to load connection configuration file: ", e);
