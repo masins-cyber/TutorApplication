@@ -76,8 +76,8 @@ class UserTest {
         assertDoesNotThrow(() -> {
             try {
                 bookingController.addLesson(lessonBean, tutorEmail);
-            } catch (LessonAlreadyInsertedException e) {
-                Print.errorPrint(e.getMessage());
+            } catch (LessonAlreadyInsertedException _) {
+                Print.errorPrint("Lesson already inserted.");
             }
         }, "The trial lesson must be successfully inserted into the DB without raising exceptions.");
 
@@ -89,8 +89,8 @@ class UserTest {
                 List<LessonBean> lessonsFound = bookingController.searchLessons(lessonBean);
                 assertFalse(lessonsFound.isEmpty(), "The lesson must be findable through filters.");
                 bookingBean.setId(lessonsFound.getFirst().getId());
-            } catch (LessonsNotFoundException e) {
-                Print.errorPrint(e.getMessage());
+            } catch (LessonsNotFoundException _) {
+                Print.errorPrint("Lessons not found.");
             }
         }, "Failure to retrieve the inserted lesson ID mapping.");
 
