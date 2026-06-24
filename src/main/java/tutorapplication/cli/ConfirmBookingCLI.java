@@ -1,9 +1,9 @@
 package tutorapplication.cli;
 
 import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.LessonAlreadyBookedException;
-import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class ConfirmBookingCLI extends AbstractState {
     private final int lessonId;
     private final BookingController controller;
-    private final Lesson lesson;
+    private final LessonBean lesson;
 
     public ConfirmBookingCLI(int lessonId) {
         super();
@@ -75,8 +75,8 @@ public class ConfirmBookingCLI extends AbstractState {
         Print.println("Lesson Id : #" + lesson.getId());
         Print.println("Subject   : " + lesson.getSubject());
         Print.println("Tutor     : " + lesson.getTutorEmail());
-        Print.println("Day       : " + lesson.getDate() + " | Time: " + lesson.getTime());
-        Print.println("Price     : " + lesson.getPrice() + "€");
+        Print.println("Day       : " + lesson.getDay() + " | Time: " + lesson.getTimeSlot());
+        Print.println("Price     : " + lesson.getMaxPrice() + "€");
         Print.println("-------------------------------------------------");
         Print.print("Do you want to definitively confirm your booking? (yes/no): ");
     }

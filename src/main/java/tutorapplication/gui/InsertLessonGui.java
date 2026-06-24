@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import tutorapplication.bean.SearchLessonBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class InsertLessonGui {
         try {
             double price = Double.parseDouble(priceText);
 
-            SearchLessonBean lessonBean = new SearchLessonBean();
+            LessonBean lessonBean = new LessonBean();
             lessonBean.setSubject(subject);
             lessonBean.setDay(day);
             lessonBean.setTimeSlot(time);

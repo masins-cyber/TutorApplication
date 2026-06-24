@@ -1,9 +1,8 @@
 package tutorapplication.cli;
 
-import tutorapplication.bean.SearchLessonBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.LessonsNotFoundException;
-import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -18,7 +17,7 @@ public class SearchLessonCLI extends AbstractState {
         display();
 
         Scanner scanner = new Scanner(System.in);
-        SearchLessonBean searchBean = new SearchLessonBean();
+        LessonBean searchBean = new LessonBean();
 
         Print.print("Subject you're searching for: ");
         searchBean.setSubject(scanner.nextLine().trim().toLowerCase());
@@ -45,7 +44,7 @@ public class SearchLessonCLI extends AbstractState {
 
         BookingController controller = new BookingController();
         try {
-            List<Lesson> foundLessons = controller.searchLessons(searchBean);
+            List<LessonBean> foundLessons = controller.searchLessons(searchBean);
             Print.println("\n[SUCCESS] Results found!");
             goNext(context, new LessonResultsCLI(foundLessons));
         }

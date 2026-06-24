@@ -9,9 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.LessonAlreadyBookedException;
-import tutorapplication.model.Lesson;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -21,7 +21,7 @@ public class ConfirmBookingGui {
     private static final Logger logger = Logger.getLogger(ConfirmBookingGui.class.getName());
     private int lessonId;
     private String studentEmail;
-    private Lesson lesson;
+    private LessonBean lesson;
     private final BookingController controller = new BookingController();
 
     @FXML
@@ -53,9 +53,9 @@ public class ConfirmBookingGui {
         }
         idLabel.setText("#" + lesson.getId());
         subjectLabel.setText(lesson.getSubject().toUpperCase());
-        dayLabel.setText(lesson.getDate().toUpperCase());
-        timeLabel.setText(lesson.getTime());
-        priceLabel.setText(lesson.getPrice() + "€");
+        dayLabel.setText(lesson.getDay().toUpperCase());
+        timeLabel.setText(lesson.getTimeSlot());
+        priceLabel.setText(lesson.getMaxPrice() + "€");
         tutorLabel.setText(lesson.getTutorEmail());
     }
 

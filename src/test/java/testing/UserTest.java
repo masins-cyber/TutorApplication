@@ -3,14 +3,13 @@ package testing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tutorapplication.bean.BookingBean;
-import tutorapplication.bean.SearchLessonBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.bean.UserBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.controller.RegistrationController;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.exception.LessonsNotFoundException;
-import tutorapplication.model.Lesson;
 import tutorapplication.others.Config;
 import tutorapplication.others.Print;
 
@@ -29,7 +28,7 @@ class UserTest {
 
     @Test
     void testSearchLessonNonExistentFilters() {
-        SearchLessonBean lessonBean = new SearchLessonBean();
+        LessonBean lessonBean = new LessonBean();
 
         lessonBean.setSubject("NonExistentLesson");
         lessonBean.setDay("");
@@ -67,7 +66,7 @@ class UserTest {
             Print.errorPrint("Setup Tutor warning: " + e.getMessage());
         }
 
-        SearchLessonBean lessonBean = new SearchLessonBean();
+        LessonBean lessonBean = new LessonBean();
         lessonBean.setSubject("Test");
         lessonBean.setDay("MONDAY");
         lessonBean.setTimeSlot(uniqueTimeSlot);
@@ -80,7 +79,7 @@ class UserTest {
         bookingBean.setStudentEmail(studentEmail);
 
         assertDoesNotThrow(() -> {
-            List<Lesson> lessonsFound = bookingController.searchLessons(lessonBean);
+            List<LessonBean> lessonsFound = bookingController.searchLessons(lessonBean);
             assertFalse(lessonsFound.isEmpty(), "The lesson must be findable through filters.");
             bookingBean.setId(lessonsFound.getFirst().getId());
         }, "Failure to retrieve the inserted lesson ID mapping.");

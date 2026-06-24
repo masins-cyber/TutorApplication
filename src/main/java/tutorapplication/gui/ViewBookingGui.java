@@ -13,9 +13,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
-import tutorapplication.model.Booking;
-import tutorapplication.model.Lesson;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,19 +29,19 @@ public class ViewBookingGui {
     private final BookingController bookingController = new BookingController();
 
     @FXML
-    private TableView<Booking> bookingsTable;
+    private TableView<BookingBean> bookingsTable;
     @FXML
-    private TableColumn<Booking, Integer> colBookingId;
+    private TableColumn<BookingBean, Integer> colBookingId;
     @FXML
-    private TableColumn<Booking, String> colStatus;
+    private TableColumn<BookingBean, String> colStatus;
     @FXML
-    private TableColumn<Booking, String> colSubject;
+    private TableColumn<BookingBean, String> colSubject;
     @FXML
-    private TableColumn<Booking, String> colTutor;
+    private TableColumn<BookingBean, String> colTutor;
     @FXML
-    private TableColumn<Booking, String> colDay;
+    private TableColumn<BookingBean, String> colDay;
     @FXML
-    private TableColumn<Booking, String> colTime;
+    private TableColumn<BookingBean, String> colTime;
 
     @FXML
     private VBox actionBox;
@@ -65,7 +65,7 @@ public class ViewBookingGui {
 
         bookingsTable.getSelectionModel().selectedItemProperty().addListener(observable -> {
             logger.log(Level.FINE, "Selection track altered: {0}", observable);
-            Booking selected = bookingsTable.getSelectionModel().getSelectedItem();
+            BookingBean selected = bookingsTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 actionBox.setVisible(true);
                 actionBox.setManaged(true);
@@ -86,27 +86,27 @@ public class ViewBookingGui {
     }
 
     private String getLessonField(int lessonId, String fieldType) {
-        Lesson l = bookingController.getLessonDetails(lessonId);
+        LessonBean l = bookingController.getLessonDetails(lessonId);
         if (l == null)
             return "N/A";
 
         return switch (fieldType) {
             case "SUBJECT" -> l.getSubject().toUpperCase();
             case "TUTOR" -> l.getTutorEmail();
-            case "DAY" -> l.getDate().toUpperCase();
-            case "TIME" -> l.getTime();
+            case "DAY" -> l.getDay().toUpperCase();
+            case "TIME" -> l.getTimeSlot();
             default -> "N/A";
         };
     }
 
     private void loadStudentBookings() {
-        List<Booking> myBookings = bookingController.getAllStudentBookings(this.studentEmail);
+        List<BookingBean> myBookings = bookingController.getAllStudentBookings(this.studentEmail);
         bookingsTable.setItems(FXCollections.observableArrayList(myBookings));
     }
 
     @FXML
     void cancelBooking() {
-        Booking selectedBooking = bookingsTable.getSelectionModel().getSelectedItem();
+        BookingBean selectedBooking = bookingsTable.getSelectionModel().getSelectedItem();
         if (selectedBooking == null)
             return;
 

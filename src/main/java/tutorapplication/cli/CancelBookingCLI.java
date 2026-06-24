@@ -1,7 +1,7 @@
 package tutorapplication.cli;
 
+import tutorapplication.bean.BookingBean;
 import tutorapplication.controller.BookingController;
-import tutorapplication.model.Booking;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -12,9 +12,9 @@ import java.util.Scanner;
 public class CancelBookingCLI extends AbstractState {
 
     private final BookingController bookingController;
-    private final List<Booking> myBookings;
+    private final List<BookingBean> myBookings;
 
-    public CancelBookingCLI(List<Booking> myBookings) {
+    public CancelBookingCLI(List<BookingBean> myBookings) {
         super();
         this.bookingController = new BookingController();
         this.myBookings = myBookings;
@@ -43,9 +43,9 @@ public class CancelBookingCLI extends AbstractState {
             return;
         }
 
-        Booking selectedBooking = null;
+        BookingBean selectedBooking = null;
         for (int i = 0; i < myBookings.size(); i++) {
-            Booking b = myBookings.get(i);
+            BookingBean b = myBookings.get(i);
             if (b.getBookingId() == targetBookingId) {
                 selectedBooking = b;
                 break;

@@ -8,9 +8,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
-import tutorapplication.model.Booking;
-import tutorapplication.model.Lesson;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -20,7 +20,7 @@ public class CancelBookingGui {
     private static final Logger logger = Logger.getLogger(CancelBookingGui.class.getName());
 
     private String studentEmail;
-    private Booking targetBooking;
+    private BookingBean targetBooking;
     private final BookingController bookingController = new BookingController();
 
     @FXML
@@ -38,7 +38,7 @@ public class CancelBookingGui {
     @FXML
     private Button abortButton;
 
-    public void setCancellationTarget(Booking booking, String email) {
+    public void setCancellationTarget(BookingBean booking, String email) {
         this.studentEmail = email;
         this.targetBooking = booking;
 
@@ -46,12 +46,12 @@ public class CancelBookingGui {
             bookingIdLabel.setText("#" + targetBooking.getBookingId());
             statusLabel.setText("[" + targetBooking.getStatus().toUpperCase() + "]");
 
-            Lesson l = bookingController.getLessonDetails(targetBooking.getId());
+            LessonBean l = bookingController.getLessonDetails(targetBooking.getId());
             if (l != null) {
                 subjectLabel.setText(l.getSubject().toUpperCase());
                 tutorLabel.setText(l.getTutorEmail());
-                dayLabel.setText(l.getDate().toUpperCase());
-                timeLabel.setText(l.getTime());
+                dayLabel.setText(l.getDay().toUpperCase());
+                timeLabel.setText(l.getTimeSlot());
             }
         }
     }

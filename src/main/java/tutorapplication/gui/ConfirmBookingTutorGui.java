@@ -13,10 +13,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.UserNotPresentException;
-import tutorapplication.model.Booking;
-import tutorapplication.model.Lesson;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,19 +30,19 @@ public class ConfirmBookingTutorGui {
     private final BookingController bookingController = new BookingController();
 
     @FXML
-    private TableView<Booking> requestsTable;
+    private TableView<BookingBean> requestsTable;
     @FXML
-    private TableColumn<Booking, Integer> colBookingId;
+    private TableColumn<BookingBean, Integer> colBookingId;
     @FXML
-    private TableColumn<Booking, String> colStudent;
+    private TableColumn<BookingBean, String> colStudent;
     @FXML
-    private TableColumn<Booking, String> colStatus;
+    private TableColumn<BookingBean, String> colStatus;
     @FXML
-    private TableColumn<Booking, String> colSubject;
+    private TableColumn<BookingBean, String> colSubject;
     @FXML
-    private TableColumn<Booking, String> colDay;
+    private TableColumn<BookingBean, String> colDay;
     @FXML
-    private TableColumn<Booking, String> colTime;
+    private TableColumn<BookingBean, String> colTime;
     @FXML
     private VBox decisionBox;
     @FXML
@@ -68,7 +68,7 @@ public class ConfirmBookingTutorGui {
 
         colSubject.setCellValueFactory(cellData -> {
             int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
+            LessonBean l = bookingController.getLessonDetails(lessonId);
             if (l != null) {
                 return new SimpleStringProperty(l.getSubject().toUpperCase());
             } else {
@@ -78,9 +78,9 @@ public class ConfirmBookingTutorGui {
 
         colDay.setCellValueFactory(cellData -> {
             int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
+            LessonBean l = bookingController.getLessonDetails(lessonId);
             if (l != null) {
-                return new SimpleStringProperty(l.getDate().toUpperCase());
+                return new SimpleStringProperty(l.getDay().toUpperCase());
             } else {
                 return new SimpleStringProperty("N/A");
             }
@@ -88,9 +88,9 @@ public class ConfirmBookingTutorGui {
 
         colTime.setCellValueFactory(cellData -> {
             int lessonId = cellData.getValue().getId();
-            Lesson l = bookingController.getLessonDetails(lessonId);
+            LessonBean l = bookingController.getLessonDetails(lessonId);
             if (l != null) {
-                return new SimpleStringProperty(l.getTime());
+                return new SimpleStringProperty(l.getTimeSlot());
             } else {
                 return new SimpleStringProperty("N/A");
             }
@@ -98,7 +98,7 @@ public class ConfirmBookingTutorGui {
 
         requestsTable.getSelectionModel().selectedItemProperty().addListener(observable -> {
             logger.log(Level.FINE, "Track select: ", observable);
-            Booking selected = requestsTable.getSelectionModel().getSelectedItem();
+            BookingBean selected = requestsTable.getSelectionModel().getSelectedItem();
 
             if (selected != null) {
                 decisionBox.setVisible(true);
@@ -111,7 +111,7 @@ public class ConfirmBookingTutorGui {
     }
 
     private void loadPendingBookings() {
-        List<Booking> pending = bookingController.getPendingBookings(this.tutorEmail);
+        List<BookingBean> pending = bookingController.getPendingBookings(this.tutorEmail);
         requestsTable.setItems(FXCollections.observableArrayList(pending));
     }
 
@@ -126,7 +126,7 @@ public class ConfirmBookingTutorGui {
     }
 
     private void processDecision(String decision) {
-        Booking selectedBooking = requestsTable.getSelectionModel().getSelectedItem();
+        BookingBean selectedBooking = requestsTable.getSelectionModel().getSelectedItem();
         if (selectedBooking == null)
             return;
 

@@ -1,9 +1,9 @@
 package tutorapplication.cli;
 
+import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.UserNotPresentException;
-import tutorapplication.model.Booking;
-import tutorapplication.model.Lesson;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.InitialState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -23,7 +23,7 @@ public class ConfirmBookingTutorCLI extends AbstractState {
     @Override
     public void action(StateMachineImpl context) {
         String tutorEmail = context.getSessionUser().getEmail();
-        List<Booking> pendingBookings = bookingController.getPendingBookings(tutorEmail);
+        List<BookingBean> pendingBookings = bookingController.getPendingBookings(tutorEmail);
 
         if (pendingBookings.isEmpty()) {
             handleNoBookings(context);
@@ -53,20 +53,20 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         goBack(context);
     }
 
-    private void printPendingBookingsSummary(List<Booking> pendingBookings) {
-        for (Booking b : pendingBookings) {
-            Lesson l = bookingController.getLessonDetails(b.getId());
+    private void printPendingBookingsSummary(List<BookingBean> pendingBookings) {
+        for (BookingBean b : pendingBookings) {
+            LessonBean l = bookingController.getLessonDetails(b.getId());
             Print.println("-------------------------------------------------");
             Print.println("Booking Reference ID: #" + b.getBookingId());
             Print.println("Student Email: " + b.getStudentEmail());
             if (l != null) {
-                Print.println("Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime());
+                Print.println("Subject: " + l.getSubject() + " | Day: " + l.getDay() + " | Time: " + l.getTimeSlot());
             }
             Print.println("-------------------------------------------------");
         }
     }
 
-    private void processTutorInput(StateMachineImpl context, String input, List<Booking> pendingBookings, String tutorEmail, Scanner scanner) {
+    private void processTutorInput(StateMachineImpl context, String input, List<BookingBean> pendingBookings, String tutorEmail, Scanner scanner) {
         int targetBookingId;
         try {
             targetBookingId = Integer.parseInt(input);
@@ -75,7 +75,7 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             return;
         }
 
-        Booking selectedBooking = findBookingById(pendingBookings, targetBookingId);
+        BookingBean selectedBooking = findBookingById(pendingBookings, targetBookingId);
         if (selectedBooking == null) {
             Print.println("[ERROR] Reference ID not found.");
             return;
@@ -92,8 +92,8 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         executeDecision(context, selectedBooking, decision, tutorEmail);
     }
 
-    private Booking findBookingById(List<Booking> pendingBookings, int targetBookingId) {
-        for (Booking b : pendingBookings) {
+    private BookingBean findBookingById(List<BookingBean> pendingBookings, int targetBookingId) {
+        for (BookingBean b : pendingBookings) {
             if (b.getBookingId() == targetBookingId) {
                 return b;
             }
@@ -101,7 +101,7 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         return null;
     }
 
-    private void executeDecision(StateMachineImpl context, Booking selectedBooking, String decision, String tutorEmail) {
+    private void executeDecision(StateMachineImpl context, BookingBean selectedBooking, String decision, String tutorEmail) {
         try {
             boolean success = bookingController.processTutorDecision(selectedBooking.getBookingId(), selectedBooking.getId(), decision);
             if (success) {

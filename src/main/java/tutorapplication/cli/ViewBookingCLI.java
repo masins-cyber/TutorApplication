@@ -1,8 +1,8 @@
 package tutorapplication.cli;
 
+import tutorapplication.bean.BookingBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
-import tutorapplication.model.Booking;
-import tutorapplication.model.Lesson;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -16,7 +16,7 @@ public class ViewBookingCLI extends AbstractState {
     public void action(StateMachineImpl context) {
         String studentEmail = context.getSessionUser().getEmail();
         BookingController bookingController = new BookingController();
-        List<Booking> myBookings = bookingController.getAllStudentBookings(studentEmail);
+        List<BookingBean> myBookings = bookingController.getAllStudentBookings(studentEmail);
 
         printHeader("My bookings");
 
@@ -30,8 +30,8 @@ public class ViewBookingCLI extends AbstractState {
 
         Print.println("\nHere is the complete list of your requests:");
         for (int i = 0; i < myBookings.size(); i++) {
-            Booking b = myBookings.get(i);
-            Lesson l = bookingController.getLessonDetails(b.getId());
+            BookingBean b = myBookings.get(i);
+            LessonBean l = bookingController.getLessonDetails(b.getId());
 
             Print.println("----------------------------------------");
 
@@ -47,7 +47,7 @@ public class ViewBookingCLI extends AbstractState {
             if (l != null) {
                 Print.println(" Subject: " + l.getSubject());
                 Print.println(" Tutor: " + l.getTutorEmail());
-                Print.println(" Day: " + l.getDate() + " | Time: " + l.getTime());
+                Print.println(" Day: " + l.getDay() + " | Time: " + l.getTimeSlot());
             }
             Print.println(" Actual state: [" + b.getStatus().toUpperCase() + "]");
         }

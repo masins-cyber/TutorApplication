@@ -1,6 +1,6 @@
 package tutorapplication.cli;
 
-import tutorapplication.bean.SearchLessonBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
@@ -15,7 +15,7 @@ public class InsertLessonCLI extends AbstractState {
         display();
 
         Scanner scanner = new Scanner(System.in);
-        SearchLessonBean lessonBean = new SearchLessonBean();
+        LessonBean lessonBean = new LessonBean();
 
         Print.print("Subject: ");
         String subject = scanner.nextLine().trim();

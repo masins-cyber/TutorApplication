@@ -1,6 +1,6 @@
 package tutorapplication.cli;
 
-import tutorapplication.model.Lesson;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class LessonResultsCLI extends AbstractState {
-    private final List<Lesson> lessonList;
+    private final List<LessonBean> lessonList;
 
-    public LessonResultsCLI(List<Lesson> lessons) {
+    public LessonResultsCLI(List<LessonBean> lessons) {
         super();
         this.lessonList = lessons;
     }
@@ -53,8 +53,8 @@ public class LessonResultsCLI extends AbstractState {
     @Override
     public void display() {
         printHeader("Search Results");
-        for (Lesson l : lessonList) {
-            Print.println("ID: " + l.getId() + " | Subject: " + l.getSubject() + " | Day: " + l.getDate() + " | Time: " + l.getTime() + " | Price: " + l.getPrice() + "€" + " | Tutor: " + l.getTutorEmail());
+        for (LessonBean l : lessonList) {
+            Print.println("ID: " + l.getId() + " | Subject: " + l.getSubject() + " | Day: " + l.getDay() + " | Time: " + l.getTimeSlot() + " | Price: " + l.getMaxPrice() + "€" + " | Tutor: " + l.getTutorEmail());
         }
         Print.println("\nOPTIONS:");
         Print.println("1) Book a lesson through the ID.");

@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import tutorapplication.model.Lesson;
+import tutorapplication.bean.LessonBean;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,19 +21,19 @@ public class LessonResultsGui {
     private String studentEmail;
 
     @FXML
-    private TableView<Lesson> lessonsTable;
+    private TableView<LessonBean> lessonsTable;
     @FXML
-    private TableColumn<Lesson, Integer> colId;
+    private TableColumn<LessonBean, Integer> colId;
     @FXML
-    private TableColumn<Lesson, String> colSubject;
+    private TableColumn<LessonBean, String> colSubject;
     @FXML
-    private TableColumn<Lesson, String> colDay;
+    private TableColumn<LessonBean, String> colDay;
     @FXML
-    private TableColumn<Lesson, String> colTime;
+    private TableColumn<LessonBean, String> colTime;
     @FXML
-    private TableColumn<Lesson, Double> colPrice;
+    private TableColumn<LessonBean, Double> colPrice;
     @FXML
-    private TableColumn<Lesson, String> colTutor;
+    private TableColumn<LessonBean, String> colTutor;
 
     @FXML
     private Button backToSearchButton;
@@ -57,7 +57,7 @@ public class LessonResultsGui {
 
         lessonsTable.getSelectionModel().selectedItemProperty().addListener(observable -> {
             logger.log(Level.FINE, "Selection property invalidated: {0}", observable);
-            Lesson selected = lessonsTable.getSelectionModel().getSelectedItem();
+            LessonBean selected = lessonsTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 bookLessonButton.setVisible(true);
                 bookLessonButton.setManaged(true);
@@ -68,7 +68,7 @@ public class LessonResultsGui {
             }
         });
     }
-    public void setLessonsData(List<Lesson> lessons) {
+    public void setLessonsData(List<LessonBean> lessons) {
         if (lessons != null) {
             lessonsTable.setItems(FXCollections.observableArrayList(lessons));
         }
@@ -76,7 +76,7 @@ public class LessonResultsGui {
 
     @FXML
     void bookLesson() {
-        Lesson selectedLesson = lessonsTable.getSelectionModel().getSelectedItem();
+        LessonBean selectedLesson = lessonsTable.getSelectionModel().getSelectedItem();
 
         if (selectedLesson == null) {
             showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a lesson from the table first!");

@@ -6,10 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import tutorapplication.bean.SearchLessonBean;
+import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.exception.LessonsNotFoundException;
-import tutorapplication.model.Lesson;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +54,7 @@ public class SearchLessonGui {
         String time = timeField.getText().trim();
 
         try {
-            SearchLessonBean searchBean = new SearchLessonBean();
+            LessonBean searchBean = new LessonBean();
             searchBean.setSubject(subject.toLowerCase());
             searchBean.setDay(day);
             searchBean.setTimeSlot(time);
@@ -68,7 +67,7 @@ public class SearchLessonGui {
             }
 
             BookingController bookingController = new BookingController();
-            List<Lesson> foundLessons = bookingController.searchLessons(searchBean);
+            List<LessonBean> foundLessons = bookingController.searchLessons(searchBean);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/lessonresults.fxml"));
             Parent root = loader.load();
