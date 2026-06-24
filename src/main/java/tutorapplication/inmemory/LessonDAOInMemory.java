@@ -15,9 +15,9 @@ public class LessonDAOInMemory implements LessonDAO {
     private static final AtomicInteger idCounter = new AtomicInteger(1);
 
     @Override
-    public boolean saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
+    public void saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
         if (lesson == null) {
-            return false;
+            return;
         }
         for (int i = 0; i < lessonsTable.size(); i++) {
             Lesson current = lessonsTable.get(i);
@@ -27,11 +27,15 @@ public class LessonDAOInMemory implements LessonDAO {
         }
         Lesson lessonToSave = new Lesson(idCounter.getAndIncrement(), lesson.getSubject(), lesson.getDate(), lesson.getTime(), lesson.getPrice(), lesson.getTutorEmail(), true);
         lessonsTable.add(lessonToSave);
-        return true;
     }
 
     @Override
     public List<Lesson> findLessonsByFilters(String subject, String date, String timeSlot, Double maxPrice) throws LessonsNotFoundException {
+
+        if (subject.trim().isEmpty()) {
+            throw new LessonsNotFoundException();
+        }
+
         List<Lesson> lessons = new ArrayList<>();
 
         double finalPrice = java.util.Objects.requireNonNullElse(maxPrice, 999.99);

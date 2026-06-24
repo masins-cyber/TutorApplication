@@ -1,7 +1,6 @@
 package tutorapplication.cli;
 
 import tutorapplication.bean.BookingBean;
-import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
@@ -31,7 +30,7 @@ public class ViewBookingCLI extends AbstractState {
         Print.println("\nHere is the complete list of your requests:");
         for (int i = 0; i < myBookings.size(); i++) {
             BookingBean b = myBookings.get(i);
-            LessonBean l = bookingController.getLessonDetails(b.getId());
+
 
             Print.println("----------------------------------------");
 
@@ -44,11 +43,10 @@ public class ViewBookingCLI extends AbstractState {
             else {
                 Print.println("RESERVATION MADE (Booked that is waiting for tutor): #" + b.getBookingId());
             }
-            if (l != null) {
-                Print.println(" Subject: " + l.getSubject());
-                Print.println(" Tutor: " + l.getTutorEmail());
-                Print.println(" Day: " + l.getDay() + " | Time: " + l.getTimeSlot());
-            }
+
+            Print.println(" Subject: " + b.getSubject());
+            Print.println(" Tutor: " + b.getTutorEmail());
+            Print.println(" Day: " + b.getDate() + " | Time: " + b.getTime());
             Print.println(" Actual state: [" + b.getStatus().toUpperCase() + "]");
         }
 

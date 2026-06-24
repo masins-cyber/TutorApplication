@@ -15,7 +15,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
     private static final Logger logger = Logger.getLogger(LessonDAOMYSQL.class.getName());
     @Override
-    public boolean saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
+    public void saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
 
         String query = "INSERT INTO lessons (subject, day, time_slot, price, tutor_email, available) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -28,7 +28,7 @@ public class LessonDAOMYSQL implements LessonDAO {
             stmt.setString(5, lesson.getTutorEmail());
             stmt.setBoolean(6, true);
 
-            return stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
 
         }
         catch (SQLException e) {
@@ -38,7 +38,6 @@ public class LessonDAOMYSQL implements LessonDAO {
             else {
                 logger.log(Level.SEVERE, "Database error during lesson persistence process", e);
             }
-            return false;
         }
     }
 

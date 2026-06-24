@@ -18,11 +18,17 @@ public class LoginCLI extends AbstractState {
 
         Scanner scanner = new Scanner(System.in);
         Print.print("Email: ");
-        String email = scanner.nextLine();
+        String email = scanner.nextLine().trim();
         Print.print("Password: ");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().trim();
         Print.print("Are you a Tutor? (yes/no): ");
-        String choice = scanner.nextLine();
+        String choice = scanner.nextLine().trim();
+
+        if (email.isEmpty() || password.isEmpty() || choice.isEmpty()) {
+            Print.println("\n[ERROR] All fields are mandatory to login! Returning to main menu.");
+            goBack(context);
+            return;
+        }
 
         boolean isTutor = choice.equalsIgnoreCase("yes");
 

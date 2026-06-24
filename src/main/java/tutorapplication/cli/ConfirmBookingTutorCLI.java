@@ -84,16 +84,12 @@ public class ConfirmBookingTutorCLI extends AbstractState {
         Print.print("Type 'accept' to approve or 'reject' to deny this booking: ");
         String decision = scanner.nextLine().trim().toLowerCase();
 
-        if (!decision.equals("accept") && !decision.equals("reject")) {
-            Print.println("[ERROR] Invalid action. You must choose 'accept' or 'reject'.");
-            return;
-        }
-
         executeDecision(context, selectedBooking, decision, tutorEmail);
     }
 
     private BookingBean findBookingById(List<BookingBean> pendingBookings, int targetBookingId) {
-        for (BookingBean b : pendingBookings) {
+        for (int i = 0; i < pendingBookings.size(); i++) {
+            BookingBean b = pendingBookings.get(i);
             if (b.getBookingId() == targetBookingId) {
                 return b;
             }
@@ -102,6 +98,11 @@ public class ConfirmBookingTutorCLI extends AbstractState {
     }
 
     private void executeDecision(StateMachineImpl context, BookingBean selectedBooking, String decision, String tutorEmail) {
+        if (!decision.equals("accept") && !decision.equals("reject")) {
+            Print.println("[NOTICE] Operation cancelled. Invalid choice.");
+            return;
+        }
+
         try {
             boolean success = bookingController.processTutorDecision(selectedBooking.getBookingId(), selectedBooking.getId(), decision);
             if (success) {

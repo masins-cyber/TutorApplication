@@ -20,20 +20,38 @@ public class RegistrationCLI extends AbstractState {
         UserBean userBean = new UserBean();
 
         Print.print("Email: ");
-        userBean.setEmail(scanner.nextLine());
+        String email = scanner.nextLine().trim();
         Print.print("Password: ");
-        userBean.setPassword(scanner.nextLine());
+        String password = scanner.nextLine().trim();
         Print.print("Name: ");
-        userBean.setName(scanner.nextLine());
+        String name = scanner.nextLine().trim();
         Print.print("Surname: ");
-        userBean.setSurname(scanner.nextLine());
+        String surname = scanner.nextLine().trim();
         Print.print("Role (STUDENT/TUTOR): ");
-        String role = scanner.nextLine().toUpperCase();
+        String role = scanner.nextLine().trim().toUpperCase();
+
+        if (email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty() || role.isEmpty()) {
+            Print.println("\n[ERROR] All fields are mandatory! Returning to main menu.");
+            goBack(context);
+            return;
+        }
+
+        userBean.setEmail(email);
+        userBean.setPassword(password);
+        userBean.setName(name);
+        userBean.setSurname(surname);
         userBean.setRole(role);
 
         if ("STUDENT".equals(role)) {
             Print.print("Student ID: ");
-            userBean.setStudentId(scanner.nextLine());
+            String studentId = scanner.nextLine().trim();
+
+            if (studentId.isEmpty()) {
+                Print.println("\n[ERROR] Student ID is mandatory for STUDENT role! Returning to main menu.");
+                goBack(context);
+                return;
+            }
+            userBean.setStudentId(studentId);
         }
 
         RegistrationController registrationController = new RegistrationController();

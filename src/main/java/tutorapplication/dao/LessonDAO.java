@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LessonDAO {
 
-    boolean saveLesson(Lesson lesson) throws LessonAlreadyInsertedException;
+    void saveLesson(Lesson lesson) throws LessonAlreadyInsertedException;
 
     List<Lesson> findLessonsByFilters(String subject, String day,  String timeSlot, Double maxPrice) throws LessonsNotFoundException;
 
