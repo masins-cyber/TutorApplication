@@ -72,7 +72,7 @@ public class InsertLessonGui {
             goBackHome();
         }
         catch (LessonAlreadyInsertedException e) {
-            logger.log(Level.WARNING, "Duplicate lesson entry blocked: " + e.getMessage());
+            logger.log(Level.WARNING, "Duplicate lesson entry blocked: {0}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Duplicate Lesson", e.getMessage());
         }
         catch (NumberFormatException _) {
