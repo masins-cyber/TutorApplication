@@ -41,7 +41,7 @@ public class LessonDAOInMemory implements LessonDAO {
         double finalPrice = java.util.Objects.requireNonNullElse(maxPrice, 999.99);
         for (int i = 0; i < lessonsTable.size(); i++) {
             Lesson l = lessonsTable.get(i);
-            if (l.isAvailable() && (subject == null || subject.isEmpty() || l.getSubject().equalsIgnoreCase(subject)) && (date == null || date.isEmpty() || l.getDate().equalsIgnoreCase(date)) && (timeSlot == null || timeSlot.isEmpty() || l.getTime().equalsIgnoreCase(timeSlot)) && (l.getPrice() <= finalPrice)) {
+            if (l.isAvailable() && (subject.isEmpty() || l.getSubject().equalsIgnoreCase(subject)) && (date == null || date.isEmpty() || l.getDate().equalsIgnoreCase(date)) && (timeSlot == null || timeSlot.isEmpty() || l.getTime().equalsIgnoreCase(timeSlot)) && (l.getPrice() <= finalPrice)) {
                 lessons.add(l);
             }
         }
