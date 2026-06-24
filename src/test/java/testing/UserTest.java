@@ -9,6 +9,7 @@ import tutorapplication.controller.BookingController;
 import tutorapplication.controller.RegistrationController;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.LessonAlreadyBookedException;
+import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.others.Config;
 import tutorapplication.others.Print;
@@ -72,15 +73,25 @@ class UserTest {
         lessonBean.setTimeSlot(uniqueTimeSlot);
         lessonBean.setMaxPrice(50.0);
 
-        assertDoesNotThrow(() -> bookingController.addLesson(lessonBean, tutorEmail), "The trial lesson must be successfully inserted into the DB without raising exceptions.");
+        assertDoesNotThrow(() -> {
+            try {
+                bookingController.addLesson(lessonBean, tutorEmail);
+            } catch (LessonAlreadyInsertedException e) {
+                fail("The trial lesson should be successfully inserted, but threw LessonAlreadyInsertedException: " + e.getMessage());
+            }
+        }, "The trial lesson must be successfully inserted into the DB without raising exceptions.");
 
         final BookingBean bookingBean = new BookingBean();
         bookingBean.setStudentEmail(studentEmail);
 
         assertDoesNotThrow(() -> {
-            List<LessonBean> lessonsFound = bookingController.searchLessons(lessonBean);
-            assertFalse(lessonsFound.isEmpty(), "The lesson must be findable through filters.");
-            bookingBean.setId(lessonsFound.getFirst().getId());
+            try {
+                List<LessonBean> lessonsFound = bookingController.searchLessons(lessonBean);
+                assertFalse(lessonsFound.isEmpty(), "The lesson must be findable through filters.");
+                bookingBean.setId(lessonsFound.getFirst().getId());
+            } catch (LessonsNotFoundException e) {
+                fail("The lesson was inserted but searchLessons could not find it: " + e.getMessage());
+            }
         }, "Failure to retrieve the inserted lesson ID mapping.");
 
         assertDoesNotThrow(() -> {
