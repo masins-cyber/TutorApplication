@@ -30,7 +30,6 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             return;
         }
 
-        printHeader("Approvals");
         Print.println("\nHere are the booking requests for your lessons:");
         printPendingBookingsSummary(pendingBookings);
 
@@ -132,5 +131,8 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             context.setSessionUser(null);
             goNext(context, new InitialState());
         }
+    }
+    public void display() {
+        printHeader("Approvals");
     }
 }

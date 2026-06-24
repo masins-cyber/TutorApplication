@@ -17,7 +17,7 @@ public class ViewBookingCLI extends AbstractState {
         BookingController bookingController = new BookingController();
         List<BookingBean> myBookings = bookingController.getAllStudentBookings(studentEmail);
 
-        printHeader("My bookings");
+        display();
 
         if (myBookings.isEmpty()) {
             Print.println("\nYou haven't made any reservations yet.");
@@ -72,5 +72,10 @@ public class ViewBookingCLI extends AbstractState {
                 Print.println("[ADVISE] Invalid option. Retry.");
                 break;
         }
+    }
+
+    @Override
+    public void display() {
+        printHeader("My bookings");
     }
 }
