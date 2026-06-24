@@ -2,6 +2,7 @@ package tutorapplication.cli;
 
 import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
+import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
 import tutorapplication.pattern.StateMachineImpl;
@@ -59,13 +60,13 @@ public class InsertLessonCLI extends AbstractState {
         BookingController bookingController = new BookingController();
         String tutorEmail = context.getSessionUser().getEmail();
 
-        if (bookingController.addLesson(lessonBean, tutorEmail)) {
+        try {
+            bookingController.addLesson(lessonBean, tutorEmail);
             Print.println("\n[SUCCESS] Lesson added successfully!");
         }
-        else {
-            Print.println("\n[ERROR] You can't insert this lesson! You already have an available lesson for the same day and time!");
+        catch (LessonAlreadyInsertedException e) {
+            Print.println("\n[ERROR] " + e.getMessage());
         }
-
         goBack(context);
     }
 

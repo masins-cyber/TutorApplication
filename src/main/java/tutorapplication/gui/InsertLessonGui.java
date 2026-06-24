@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
+import tutorapplication.exception.LessonAlreadyInsertedException;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -60,20 +61,19 @@ public class InsertLessonGui {
             lessonBean.setMaxPrice(price);
 
             BookingController bookingController = new BookingController();
-            boolean success = bookingController.addLesson(lessonBean, this.tutorEmail);
+            bookingController.addLesson(lessonBean, this.tutorEmail);
 
-            if (success) {
-                logger.log(Level.INFO, "New lesson successfully added into BookingController by: {0}", this.tutorEmail);
-                showAlert(Alert.AlertType.INFORMATION, "Success", "You've inserted the lesson successfully!");
-                subjectField.clear();
-                dayComboBox.setValue(null);
-                timeField.clear();
-                priceField.clear();
-                goBackHome();
-            }
-            else {
-                showAlert(Alert.AlertType.ERROR, "Database Error", "Unable to save the lesson into the system.");
-            }
+            logger.log(Level.INFO, "New lesson successfully added into BookingController by: {0}", this.tutorEmail);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "You've inserted the lesson successfully!");
+            subjectField.clear();
+            dayComboBox.setValue(null);
+            timeField.clear();
+            priceField.clear();
+            goBackHome();
+        }
+        catch (LessonAlreadyInsertedException e) {
+            logger.log(Level.WARNING, "Duplicate lesson entry blocked: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Duplicate Lesson", e.getMessage());
         }
         catch (NumberFormatException _) {
             logger.log(Level.WARNING, "Format error for the price entered: {0}", priceText);

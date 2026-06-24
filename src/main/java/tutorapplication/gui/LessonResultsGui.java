@@ -50,9 +50,9 @@ public class LessonResultsGui {
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colSubject.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        colDay.setCellValueFactory(new PropertyValueFactory<>("date"));
-        colTime.setCellValueFactory(new PropertyValueFactory<>("time"));
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colDay.setCellValueFactory(new PropertyValueFactory<>("day"));
+        colTime.setCellValueFactory(new PropertyValueFactory<>("timeSlot"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("maxPrice"));
         colTutor.setCellValueFactory(new PropertyValueFactory<>("tutorEmail"));
 
         lessonsTable.getSelectionModel().selectedItemProperty().addListener(observable -> {

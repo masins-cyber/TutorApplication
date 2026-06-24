@@ -1,5 +1,6 @@
 package tutorapplication.dao;
 
+import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.model.Lesson;
 import tutorapplication.others.Connect;
@@ -14,7 +15,7 @@ public class LessonDAOMYSQL implements LessonDAO {
 
     private static final Logger logger = Logger.getLogger(LessonDAOMYSQL.class.getName());
     @Override
-    public boolean saveLesson(Lesson lesson) {
+    public boolean saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
 
         String query = "INSERT INTO lessons (subject, day, time_slot, price, tutor_email, available) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -32,7 +33,7 @@ public class LessonDAOMYSQL implements LessonDAO {
         }
         catch (SQLException e) {
             if(e.getErrorCode() == 1062) {
-                logger.log(Level.WARNING, "Attempted to insert a duplicate lesson slot for tutor: {0}", lesson.getTutorEmail());
+                throw new LessonAlreadyInsertedException(lesson.getTutorEmail());
             }
             else {
                 logger.log(Level.SEVERE, "Database error during lesson persistence process", e);

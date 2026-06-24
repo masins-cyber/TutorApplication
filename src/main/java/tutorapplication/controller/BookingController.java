@@ -4,6 +4,7 @@ import tutorapplication.bean.BookingBean;
 import tutorapplication.bean.LessonBean;
 import tutorapplication.dao.*;
 import tutorapplication.exception.LessonAlreadyBookedException;
+import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.model.Booking;
@@ -25,10 +26,11 @@ public class BookingController {
         this.userDAO = FactoryDAO.getUserDAO();
     }
 
-    public boolean addLesson(LessonBean lessonBean, String tutorEmail) {
+    public void addLesson(LessonBean lessonBean, String tutorEmail) throws LessonAlreadyInsertedException {
         Lesson lesson = new Lesson(lessonBean.getSubject(), lessonBean.getDay(), lessonBean.getTimeSlot(), lessonBean.getMaxPrice(), tutorEmail);
         lesson.setAvailable(true);
-        return lessonDAO.saveLesson(lesson);
+
+        lessonDAO.saveLesson(lesson);
     }
 
     public List<LessonBean> searchLessons(LessonBean searchBean) throws LessonsNotFoundException {

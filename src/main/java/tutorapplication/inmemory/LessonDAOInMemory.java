@@ -1,6 +1,7 @@
 package tutorapplication.inmemory;
 
 import tutorapplication.dao.LessonDAO;
+import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.model.Lesson;
 
@@ -14,14 +15,14 @@ public class LessonDAOInMemory implements LessonDAO {
     private static final AtomicInteger idCounter = new AtomicInteger(1);
 
     @Override
-    public boolean saveLesson(Lesson lesson) {
+    public boolean saveLesson(Lesson lesson) throws LessonAlreadyInsertedException {
         if (lesson == null) {
             return false;
         }
         for (int i = 0; i < lessonsTable.size(); i++) {
             Lesson current = lessonsTable.get(i);
             if (current.isAvailable() && current.getTutorEmail().equalsIgnoreCase(lesson.getTutorEmail()) && current.getDate().equalsIgnoreCase(lesson.getDate()) && current.getTime().equalsIgnoreCase(lesson.getTime())) {
-                return false;
+                throw new LessonAlreadyInsertedException(lesson.getTutorEmail());
             }
         }
         Lesson lessonToSave = new Lesson(idCounter.getAndIncrement(), lesson.getSubject(), lesson.getDate(), lesson.getTime(), lesson.getPrice(), lesson.getTutorEmail(), true);

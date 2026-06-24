@@ -72,8 +72,7 @@ class UserTest {
         lessonBean.setTimeSlot(uniqueTimeSlot);
         lessonBean.setMaxPrice(50.0);
 
-        boolean lessonCreated = bookingController.addLesson(lessonBean, tutorEmail);
-        assertTrue(lessonCreated, "The trial lesson must be successfully inserted into the DB.");
+        assertDoesNotThrow(() -> bookingController.addLesson(lessonBean, tutorEmail), "The trial lesson must be successfully inserted into the DB without raising exceptions.");
 
         final BookingBean bookingBean = new BookingBean();
         bookingBean.setStudentEmail(studentEmail);
