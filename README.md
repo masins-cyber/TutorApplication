@@ -1,2 +1,1 @@
-Progetto Ingegneria del Software e Progettazione Web anno 25/26
-
+Software Engineering and Web Design Project, Academic Year 25/26
