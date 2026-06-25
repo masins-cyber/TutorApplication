@@ -7,10 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tutorapplication.bean.LoginBean;
+import tutorapplication.bean.UserBean;
 import tutorapplication.controller.LoginController;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
-import tutorapplication.model.User;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -50,14 +50,14 @@ public class LoginGui {
         loginBean.setTutor(tutorCheckBox.isSelected());
 
         try {
-            User user = loginController.login(loginBean);
-            if (user != null) {
-                showAlert(Alert.AlertType.INFORMATION, "Access done!", "Welcome " + user.getName() + "!");
-                if ("TUTOR".equalsIgnoreCase(user.getRole())) {
-                    tutorPage(email);
+            UserBean loggedUser = loginController.login(loginBean);
+            if (loggedUser != null) {
+                showAlert(Alert.AlertType.INFORMATION, "Access done!", "Welcome " + loggedUser.getName() + "!");
+                if ("TUTOR".equalsIgnoreCase(loggedUser.getRole())) {
+                    tutorPage(loggedUser);
                 }
                 else {
-                    studentPage(email);
+                    studentPage(loggedUser);
                 }
             }
 
@@ -70,7 +70,7 @@ public class LoginGui {
         }
     }
 
-    private void tutorPage(String email) {
+    private void tutorPage(UserBean loggedUser) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tutorhomepage.fxml"));
             if (loader.getLocation() == null) {
@@ -79,13 +79,13 @@ public class LoginGui {
             Parent root = loader.load();
 
             TutorHomeGui tutorHome = loader.getController();
-            tutorHome.setTutorEmail(email);
+            tutorHome.setTutorEmail(loggedUser.getEmail());
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();
-            logger.log(Level.INFO, "Tutor homepage loaded successfully for: {0}", email);
+            logger.log(Level.INFO, "Tutor homepage loaded successfully for: {0}", loggedUser.getEmail());
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Error loading tutorhomepage.fxml", e);
@@ -93,7 +93,7 @@ public class LoginGui {
         }
     }
 
-    private void studentPage(String email) {
+    private void studentPage(UserBean loggedUser) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/studenthomepage.fxml"));
             if (loader.getLocation() == null) {
@@ -102,14 +102,14 @@ public class LoginGui {
             Parent root = loader.load();
 
             StudentHomeGui studentHome = loader.getController();
-            studentHome.setStudentEmail(email);
+            studentHome.setStudentEmail(loggedUser.getEmail());
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();
 
-            logger.log(Level.INFO, "Student homepage loaded successfully for: {0}", email);
+            logger.log(Level.INFO, "Student homepage loaded successfully for: {0}", loggedUser.getEmail());
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error loading studenthomepage.fxml", e);
             showAlert(Alert.AlertType.ERROR, SYSTEM_ERROR, "Failed to load student homepage.");

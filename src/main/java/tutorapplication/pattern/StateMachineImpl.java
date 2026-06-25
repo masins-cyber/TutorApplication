@@ -1,13 +1,14 @@
 package tutorapplication.pattern;
 
-import tutorapplication.bean.LoginBean;
+import tutorapplication.bean.UserBean;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class StateMachineImpl implements StateMachine {
     private final Deque<AbstractState> stateHistory;
     private AbstractState currentState;
-    private LoginBean sessionUser;
+    private UserBean sessionUser;
     private boolean isRunning = true;
 
     public StateMachineImpl() {
@@ -53,11 +54,11 @@ public class StateMachineImpl implements StateMachine {
         this.isRunning = false;
     }
 
-    public LoginBean getSessionUser() {
+    public UserBean getSessionUser() {
         return sessionUser;
     }
 
-    public void setSessionUser(LoginBean sessionUser) {
+    public void setSessionUser(UserBean sessionUser) {
         this.sessionUser = sessionUser;
     }
 }

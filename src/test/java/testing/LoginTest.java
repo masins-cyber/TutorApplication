@@ -7,7 +7,6 @@ import tutorapplication.controller.RegistrationController;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
-import tutorapplication.model.User;
 import tutorapplication.others.Config;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ class LoginTest {
         loginBean.setTutor(true);
 
         assertDoesNotThrow(() -> {
-            User result = loginController.login(loginBean);
+            UserBean result = loginController.login(loginBean);
             assertNotNull(result, "Login failed (returned null). Please check your connection to MySQL.");
             assertEquals("Simone", result.getName(), "MySQL authenticated user name does not match.");
             Print.println("Test Login Success: OK (Authentication success on MySQL for " + result.getEmail() + ")");

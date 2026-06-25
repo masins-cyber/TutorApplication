@@ -1,6 +1,7 @@
 package tutorapplication.controller;
 
 import tutorapplication.bean.LoginBean;
+import tutorapplication.bean.UserBean;
 import tutorapplication.dao.UserDAO;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
@@ -14,7 +15,7 @@ public class LoginController {
         this.userDAO = FactoryDAO.getUserDAO();
     }
 
-    public User login(LoginBean loginBean) throws UserNotPresentException, WrongCredentialsException {
+    public UserBean login(LoginBean loginBean) throws UserNotPresentException, WrongCredentialsException {
 
         if (!userDAO.existsByEmail(loginBean.getEmail())) {
             throw new UserNotPresentException(loginBean.getEmail());
@@ -31,7 +32,15 @@ public class LoginController {
         if (!user.getRole().equalsIgnoreCase(exceptedRole)) {
             throw new WrongCredentialsException();
         }
-        return user;
+
+        UserBean authenticatedUserBean = new UserBean();
+        authenticatedUserBean.setEmail(user.getEmail());
+        authenticatedUserBean.setName(user.getName());
+        authenticatedUserBean.setSurname(user.getSurname());
+        authenticatedUserBean.setRole(user.getRole());
+        authenticatedUserBean.setStudentId(user.getStudentId());
+
+        return authenticatedUserBean;
     }
 }
 

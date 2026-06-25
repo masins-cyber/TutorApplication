@@ -1,6 +1,7 @@
 package tutorapplication.cli;
 
 import tutorapplication.bean.LoginBean;
+import tutorapplication.bean.UserBean;
 import tutorapplication.controller.LoginController;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
@@ -39,12 +40,12 @@ public class LoginCLI extends AbstractState {
 
         LoginController loginController = new LoginController();
         try {
-            loginController.login(loginBean);
+            UserBean loggedUser = loginController.login(loginBean);
             Print.println("\nLogin Successful! Welcome back.");
 
-            context.setSessionUser(loginBean);
+            context.setSessionUser(loggedUser);
 
-            if (loginBean.isTutor()) {
+            if (loggedUser.getRole().equalsIgnoreCase("TUTOR")) {
                 goNext(context, new TutorHomeCLI());
             } else {
                 goNext(context, new StudentHomeCLI());
