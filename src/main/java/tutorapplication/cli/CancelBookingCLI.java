@@ -22,7 +22,7 @@ public class CancelBookingCLI extends AbstractState {
 
     @Override
     public void action(StateMachineImpl context) {
-        printHeader("Cancel Booking");
+
         Print.print("Enter the ID of the booking you want to delete (or '0' to go back): ");
 
         Scanner scanner = new Scanner(System.in);
@@ -83,5 +83,9 @@ public class CancelBookingCLI extends AbstractState {
             Print.println("\n[NOTICE] Operation cancelled. The reservation remains unchanged.");
         }
         goBack(context);
+    }
+    @Override
+    public void display() {
+        printHeader("Cancel Booking");
     }
 }

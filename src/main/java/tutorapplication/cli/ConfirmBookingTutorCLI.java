@@ -132,6 +132,8 @@ public class ConfirmBookingTutorCLI extends AbstractState {
             goNext(context, new InitialState());
         }
     }
+
+    @Override
     public void display() {
         printHeader("Approvals");
     }
