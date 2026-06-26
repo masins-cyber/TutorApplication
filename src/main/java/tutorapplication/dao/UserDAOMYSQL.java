@@ -1,7 +1,6 @@
 package tutorapplication.dao;
 
 import tutorapplication.exception.EmailAlreadyInUseException;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -36,26 +35,6 @@ public class UserDAOMYSQL implements UserDAO {
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Database error during user login authentication", e);
-        }
-        return null;
-    }
-
-    @Override
-    public User findUserByEmail(String email) throws UserNotPresentException {
-        String query = "SELECT email, password, name, surname, role, student_id FROM users WHERE email = ?";
-        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                User user = new User(rs.getString("email"), rs.getString(COLUMN_PASSWORD), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
-                user.setStudentId(rs.getString("student_id"));
-                return user;
-            }
-            throw new UserNotPresentException(email);
-        }
-        catch (SQLException _) {
-            logger.log(Level.SEVERE, "Database error while searching user by email: {0}", email);
         }
         return null;
     }

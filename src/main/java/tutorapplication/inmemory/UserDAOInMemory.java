@@ -2,7 +2,6 @@ package tutorapplication.inmemory;
 
 import tutorapplication.dao.UserDAO;
 import tutorapplication.exception.EmailAlreadyInUseException;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.model.User;
 import tutorapplication.others.PasswordHasher;
@@ -22,17 +21,6 @@ public class UserDAOInMemory implements UserDAO {
             }
         }
         throw new WrongCredentialsException();
-    }
-
-    @Override
-    public User findUserByEmail(String email) throws UserNotPresentException {
-        for (int i = 0; i < usersTable.size(); i++) {
-            User u = usersTable.get(i);
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                return u;
-            }
-        }
-        throw new UserNotPresentException(email);
     }
 
     @Override

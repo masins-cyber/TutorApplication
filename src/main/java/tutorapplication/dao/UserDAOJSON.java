@@ -1,7 +1,6 @@
 package tutorapplication.dao;
 
 import tutorapplication.exception.EmailAlreadyInUseException;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.model.User;
 import tutorapplication.others.PasswordHasher;
@@ -158,17 +157,5 @@ public class UserDAOJSON implements UserDAO {
             }
         }
         return false;
-    }
-
-    @Override
-    public User findUserByEmail(String email) throws UserNotPresentException {
-        List<User> db = loadUsersFromFile();
-        for (int i = 0; i < db.size(); i++) {
-            User u = db.get(i);
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                return u;
-            }
-        }
-        throw new UserNotPresentException(email);
     }
 }

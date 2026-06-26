@@ -6,10 +6,8 @@ import tutorapplication.dao.*;
 import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.model.Booking;
 import tutorapplication.model.Lesson;
-import tutorapplication.model.User;
 import tutorapplication.others.FactoryDAO;
 
 import java.util.ArrayList;
@@ -54,11 +52,7 @@ public class BookingController {
 
     public int bookLesson(BookingBean bookingBean) throws LessonAlreadyBookedException {
         Lesson lesson = lessonDAO.findLessonById(bookingBean.getId());
-        if (lesson == null) {
-            return -1;
-        }
-
-        if (!lesson.isAvailable()) {
+        if (lesson == null || !lesson.isAvailable()) {
             throw new LessonAlreadyBookedException(bookingBean.getId());
         }
 
@@ -82,35 +76,23 @@ public class BookingController {
         return beanList;
     }
 
-    public boolean processTutorDecision(int bookingId, int lessonId, String decision) throws UserNotPresentException {
+    public boolean processTutorDecision(int bookingId, int lessonId, String decision) {
         Booking booking = bookingDAO.findBookingById(bookingId);
         if (booking == null) {
             return false;
         }
 
         Lesson lesson = lessonDAO.findLessonById(lessonId);
-        if (lesson != null) {
-            String tutorEmail = lesson.getTutorEmail();
-            User tutorUser = userDAO.findUserByEmail(tutorEmail);
-            if (tutorUser == null) {
-                throw new UserNotPresentException(tutorEmail);
+        if (lesson != null && userDAO.existsByEmail(lesson.getTutorEmail())) {
+            if (decision.equalsIgnoreCase("accept")) {
+                return bookingDAO.updateBookingStatus(bookingId, "accepted");
             }
-        }
-
-        if (decision.equalsIgnoreCase("accept")) {
-            return bookingDAO.updateBookingStatus(bookingId, "accepted");
-        }
-        else if (decision.equalsIgnoreCase("reject")) {
-            boolean bookingUpdated = bookingDAO.updateBookingStatus(bookingId, "rejected");
-
-            if (bookingUpdated && lesson != null) {
-                lessonDAO.updateLessonStatus(lesson, true);
-                String studentEmail = booking.getStudentEmail();
-                User studentUser = userDAO.findUserByEmail(studentEmail);
-                if (studentUser == null) {
-                    throw new UserNotPresentException(studentEmail);
+            else if (decision.equalsIgnoreCase("reject")) {
+                boolean bookingUpdated = bookingDAO.updateBookingStatus(bookingId, "rejected");
+                if (bookingUpdated) {
+                    lessonDAO.updateLessonStatus(lesson, true);
+                    return userDAO.existsByEmail(booking.getStudentEmail());
                 }
-                return true;
             }
         }
         return false;

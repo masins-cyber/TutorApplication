@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import tutorapplication.bean.BookingBean;
 import tutorapplication.bean.LessonBean;
 import tutorapplication.controller.BookingController;
-import tutorapplication.exception.UserNotPresentException;
 
 import java.io.IOException;
 import java.util.List;
@@ -130,38 +129,26 @@ public class ConfirmBookingTutorGui {
         if (selectedBooking == null)
             return;
 
-        try {
-            boolean success = bookingController.processTutorDecision(selectedBooking.getBookingId(), selectedBooking.getId(), decision);
+        boolean success = bookingController.processTutorDecision(selectedBooking.getBookingId(), selectedBooking.getId(), decision);
 
-            if (success) {
-                String finalState;
-                if (decision.equals("accept")) {
-                    finalState = "accepted";
-                } else {
-                    finalState = "rejected";
-                }
-
-                String infoMessage = "Decision recorded! Status changed to: '" + finalState + "'";
-                if (decision.equals("reject")) {
-                    infoMessage += "\nThe lesson is available again for other students.";
-                }
-
-                showAlert(Alert.AlertType.INFORMATION, "Success", infoMessage);
-                loadPendingBookings();
-            }
-            else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Error updating database.");
+        if (success) {
+            String finalState;
+            if (decision.equals("accept")) {
+                finalState = "accepted";
+            } else {
+                finalState = "rejected";
             }
 
-        } catch (UserNotPresentException e) {
-            logger.log(Level.SEVERE, "Security context error", e);
-            if (e.getMessage() != null && e.getMessage().contains(this.tutorEmail)) {
-                showAlert(Alert.AlertType.ERROR, "CRITICAL ALERT", e.getMessage());
-                forceLogoutToLoginScreen();
+            String infoMessage = "Decision recorded! Status changed to: '" + finalState + "'";
+            if (decision.equals("reject")) {
+                infoMessage += "\nThe lesson is available again for other students.";
             }
-            else {
-                showAlert(Alert.AlertType.WARNING, "Warning", e.getMessage());
-            }
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", infoMessage);
+            loadPendingBookings();
+        }
+        else {
+            showAlert(Alert.AlertType.ERROR, "Error", "Error updating database.");
         }
     }
 
@@ -180,20 +167,6 @@ public class ConfirmBookingTutorGui {
             stage.show();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error backing to home dashboard", e);
-        }
-    }
-
-    private void forceLogoutToLoginScreen() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) requestsTable.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
-        }
-        catch (IOException e) {
-            logger.log(Level.SEVERE, "Error forcing security logout", e);
         }
     }
 
