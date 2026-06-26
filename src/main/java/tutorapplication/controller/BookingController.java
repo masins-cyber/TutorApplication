@@ -47,7 +47,10 @@ public class BookingController {
 
     public LessonBean getLessonDetails(int id) {
         Lesson lesson = lessonDAO.findLessonById(id);
-        return lesson != null ? mapToLessonBean(lesson) : null;
+        if (lesson != null) {
+            return mapToLessonBean(lesson);
+        }
+        return null;
     }
 
     public int bookLesson(BookingBean bookingBean) throws LessonAlreadyBookedException {

@@ -103,7 +103,13 @@ public class ConfirmBookingTutorCLI extends AbstractState {
 
         if (success) {
             Print.println("\n=================================================");
-            String finalState = "accept".equals(decision) ? "accepted" : "rejected";
+            String finalState;
+            if ("accept".equals(decision)) {
+                finalState = "accepted";
+            } else {
+                finalState = "rejected";
+            }
+
             Print.println("[SUCCESS] Decision recorded! Status changed to: '" + finalState + "'");
             if ("reject".equals(decision)) {
                 Print.println("[INFO] The lesson is available again for other students.");

@@ -19,7 +19,7 @@ public class BookingDAOInMemory implements BookingDAO {
             return -1;
         }
         LessonDAOInMemory lessonDAO = new LessonDAOInMemory();
-        tutorapplication.model.Lesson associatedLesson = lessonDAO.findLessonById(booking.getId());
+        Lesson associatedLesson = lessonDAO.findLessonById(booking.getId());
 
         if (associatedLesson != null && !associatedLesson.isAvailable()) {
             throw new LessonAlreadyBookedException(booking.getId());
