@@ -4,7 +4,6 @@ import tutorapplication.bean.LoginBean;
 import tutorapplication.bean.UserBean;
 import tutorapplication.dao.StudentDAO;
 import tutorapplication.dao.TutorDAO;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.model.Student;
 import tutorapplication.model.Tutor;
@@ -21,7 +20,7 @@ public class LoginController {
         this.tutorDAO = FactoryDAO.getTutorDAO();
     }
 
-    public UserBean login(LoginBean loginBean) throws UserNotPresentException, WrongCredentialsException {
+    public UserBean login(LoginBean loginBean) throws WrongCredentialsException {
 
         boolean isTutor = loginBean.isTutor();
         User user;

@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import tutorapplication.bean.LoginBean;
 import tutorapplication.bean.UserBean;
 import tutorapplication.controller.LoginController;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 
 import java.io.IOException;
@@ -61,9 +60,6 @@ public class LoginGui {
                 }
             }
 
-        }
-        catch (UserNotPresentException e) {
-            showAlert(Alert.AlertType.ERROR, "User not found!", e.getMessage());
         }
         catch (WrongCredentialsException e) {
             showAlert(Alert.AlertType.ERROR, "Wrong credentials", e.getMessage());

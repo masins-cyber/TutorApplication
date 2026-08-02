@@ -3,7 +3,6 @@ package tutorapplication.cli;
 import tutorapplication.bean.LoginBean;
 import tutorapplication.bean.UserBean;
 import tutorapplication.controller.LoginController;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.others.Print;
 import tutorapplication.pattern.AbstractState;
@@ -50,11 +49,6 @@ public class LoginCLI extends AbstractState {
             } else {
                 goNext(context, new StudentHomeCLI());
             }
-        }
-        catch (UserNotPresentException e) {
-            Print.println("\n[LOGIN FAILED] " + e.getMessage());
-            Print.println("If you are not yet registered, select the Registration option from the main menu.");
-            goBack(context);
         }
         catch (WrongCredentialsException e) {
             Print.println("\n" + e.getMessage());
