@@ -1,0 +1,7 @@
+[
+  {"email":"simix@gmail.com","password":"$2a$10$Iwj5CQJzE5TZCFyvK8idB.c913ACZyZOORzJzPV/gixVLuBA19Qgm","name":"Simone","surname":"Piras","role":"TUTOR",},
+  {"email":"user@gmail.com","password":"$2a$10$bvXzfADuWMvQ2Y/OQWwOT.POdyZ/iGfAgJ.mBDwIOAxwNquHD5RxK","name":"User","surname":"Us","role":"TUTOR",},
+  {"email":"enri@gmail.com","password":"$2a$10$Y5W2vjeBP6xtXkEJiL6lguzuznbedkog9g8yll8Xv54CCCyQy0/Wi","name":"Enrico","surname":"D'Angelo","role":"TUTOR",},
+  {"email":"damon7@gmail.com","password":"$2a$10$a2bR5uFKprsTWQ73msOd1OQrRW6gRqneArpTNHzHgSi.e2HMs0wny","name":"Matt","surname":"Damon","role":"TUTOR",},
+  {"email":"maso20@gmail.com","password":"$2a$10$PV7xKCMdf1oA5gR0fj4PaOwxolP/59E.8.4Pqt0ipY4tXSjIu8ZMi","name":"Matteo","surname":"Masini","role":"TUTOR",}
+]
