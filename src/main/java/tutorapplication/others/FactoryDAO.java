@@ -2,8 +2,15 @@ package tutorapplication.others;
 
 import tutorapplication.inmemory.BookingDAOInMemory;
 import tutorapplication.inmemory.LessonDAOInMemory;
-import tutorapplication.inmemory.UserDAOInMemory;
+import tutorapplication.inmemory.StudentDAOInMemory;
+import tutorapplication.inmemory.TutorDAOInMemory;
 import tutorapplication.dao.*;
+import tutorapplication.json.StudentDAOJSON;
+import tutorapplication.json.TutorDAOJSON;
+import tutorapplication.mysql.BookingDAOMYSQL;
+import tutorapplication.mysql.LessonDAOMYSQL;
+import tutorapplication.mysql.StudentDAOMYSQL;
+import tutorapplication.mysql.TutorDAOMYSQL;
 
 public class FactoryDAO {
     private static final String MYSQL = "mysql";
@@ -12,16 +19,30 @@ public class FactoryDAO {
 
     private FactoryDAO() {}
 
-    public static UserDAO getUserDAO() {
+    public static StudentDAO getStudentDAO() {
         String daotype = Config.getPersistenceType();
         if (MYSQL.equalsIgnoreCase(daotype)) {
-            return new UserDAOMYSQL();
+            return new StudentDAOMYSQL();
         }
         else if (JSON.equalsIgnoreCase(daotype)) {
-            return new UserDAOJSON();
+            return new StudentDAOJSON();
         }
         else if (MEMORY.equalsIgnoreCase(daotype)) {
-            return new UserDAOInMemory();
+            return new StudentDAOInMemory();
+        }
+        return null;
+    }
+
+    public static TutorDAO getTutorDAO() {
+        String daotype = Config.getPersistenceType();
+        if (MYSQL.equalsIgnoreCase(daotype)) {
+            return new TutorDAOMYSQL();
+        }
+        else if (JSON.equalsIgnoreCase(daotype)) {
+            return new TutorDAOJSON();
+        }
+        else if (MEMORY.equalsIgnoreCase(daotype)) {
+            return new TutorDAOInMemory();
         }
         return null;
     }

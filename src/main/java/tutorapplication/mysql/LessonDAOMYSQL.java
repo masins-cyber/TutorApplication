@@ -1,5 +1,6 @@
-package tutorapplication.dao;
+package tutorapplication.mysql;
 
+import tutorapplication.dao.LessonDAO;
 import tutorapplication.exception.LessonAlreadyInsertedException;
 import tutorapplication.exception.LessonsNotFoundException;
 import tutorapplication.model.Lesson;

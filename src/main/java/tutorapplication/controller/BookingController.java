@@ -16,12 +16,14 @@ import java.util.List;
 public class BookingController {
     private final LessonDAO lessonDAO;
     private final BookingDAO bookingDAO;
-    private final UserDAO userDAO;
+    private final TutorDAO tutorDAO;
+    private final StudentDAO studentDAO;
 
     public BookingController() {
         this.lessonDAO = FactoryDAO.getLessonDAO();
         this.bookingDAO = FactoryDAO.getBookingDAO();
-        this.userDAO = FactoryDAO.getUserDAO();
+        this.tutorDAO = FactoryDAO.getTutorDAO();
+        this.studentDAO = FactoryDAO.getStudentDAO();
     }
 
     public void addLesson(LessonBean lessonBean, String tutorEmail) throws LessonAlreadyInsertedException {
@@ -86,7 +88,7 @@ public class BookingController {
         }
 
         Lesson lesson = lessonDAO.findLessonById(lessonId);
-        if (lesson != null && userDAO.existsByEmail(lesson.getTutorEmail())) {
+        if (lesson != null && tutorDAO.existsByEmail(lesson.getTutorEmail())) {
             if (decision.equalsIgnoreCase("accept")) {
                 return bookingDAO.updateBookingStatus(bookingId, "accepted");
             }
@@ -94,7 +96,7 @@ public class BookingController {
                 boolean bookingUpdated = bookingDAO.updateBookingStatus(bookingId, "rejected");
                 if (bookingUpdated) {
                     lessonDAO.updateLessonStatus(lesson, true);
-                    return userDAO.existsByEmail(booking.getStudentEmail());
+                    return studentDAO.existsByEmail(booking.getStudentEmail());
                 }
             }
         }

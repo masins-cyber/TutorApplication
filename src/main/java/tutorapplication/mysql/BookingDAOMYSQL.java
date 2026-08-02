@@ -1,5 +1,6 @@
-package tutorapplication.dao;
+package tutorapplication.mysql;
 
+import tutorapplication.dao.BookingDAO;
 import tutorapplication.exception.LessonAlreadyBookedException;
 import tutorapplication.model.Booking;
 import tutorapplication.others.Connect;

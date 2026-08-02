@@ -1,8 +1,9 @@
-package tutorapplication.dao;
+package tutorapplication.json;
 
+import tutorapplication.dao.StudentDAO;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.WrongCredentialsException;
-import tutorapplication.model.User;
+import tutorapplication.model.Student;
 import tutorapplication.others.PasswordHasher;
 
 import java.io.IOException;
@@ -14,23 +15,23 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-public class UserDAOJSON implements UserDAO {
+public class StudentDAOJSON implements StudentDAO {
 
-    private static final String FILE_PATH = "data/users.txt";
-    private static final Logger logger = Logger.getLogger(UserDAOJSON.class.getName());
+    private static final String FILE_PATH = "data/stud.txt";
+    private static final Logger logger = Logger.getLogger(StudentDAOJSON.class.getName());
 
-    private List<User> loadUsersFromFile() {
-        List<User> users = new ArrayList<>();
+    private List<Student> loadStudentsFromFile() {
+        List<Student> students = new ArrayList<>();
         Path path = Paths.get(FILE_PATH);
 
         if (!Files.exists(path)) {
-            return users;
+            return students;
         }
 
         try {
             String content = Files.readString(path).trim();
             if (content.isEmpty() || content.equals("[]")) {
-                return users;
+                return students;
             }
             content = content.substring(1, content.length() - 1).trim();
             String[] userBlocks = content.split("},");
@@ -45,43 +46,41 @@ public class UserDAOJSON implements UserDAO {
                 String surname = extractJsonValue(block, "surname");
                 String role = extractJsonValue(block, "role");
                 String studentId = extractJsonValue(block, "student_id");
-                if (email != null) {
-                    User u = new User(email, password, name, surname, role);
-                    if (studentId != null && !studentId.equals("null") && !studentId.isEmpty()) {
-                        u.setStudentId(studentId);
-                    }
-                    users.add(u);
+
+                if (email != null && "STUDENT".equalsIgnoreCase(role)) {
+                    Student s = new Student(email, password, name, surname, role, studentId);
+                    students.add(s);
                 }
             }
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "JSON Parsing Engine: Unable to read from local data file storage", e);
         }
-        return users;
+        return students;
     }
 
-    private void saveUsersToFile(List<User> users) {
+    private void saveStudentsToFile(List<Student> students) {
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[\n");
-        for (int i = 0; i < users.size(); i++) {
-            User u = users.get(i);
+        for (int i = 0; i < students.size(); i++) {
+            Student s = students.get(i);
             jsonBuilder.append("  {");
-            jsonBuilder.append("\"email\":\"").append(u.getEmail()).append("\",");
-            jsonBuilder.append("\"password\":\"").append(u.getPassword()).append("\",");
-            jsonBuilder.append("\"name\":\"").append(u.getName()).append("\",");
-            jsonBuilder.append("\"surname\":\"").append(u.getSurname()).append("\",");
-            jsonBuilder.append("\"role\":\"").append(u.getRole()).append("\",");
+            jsonBuilder.append("\"email\":\"").append(s.getEmail()).append("\",");
+            jsonBuilder.append("\"password\":\"").append(s.getPassword()).append("\",");
+            jsonBuilder.append("\"name\":\"").append(s.getName()).append("\",");
+            jsonBuilder.append("\"surname\":\"").append(s.getSurname()).append("\",");
+            jsonBuilder.append("\"role\":\"").append(s.getRole()).append("\",");
 
             String finalStudentId;
-            if (u.getStudentId() != null) {
-                finalStudentId = u.getStudentId();
+            if (s.getStudentId() != null) {
+                finalStudentId = s.getStudentId();
             }
             else {
                 finalStudentId = "";
             }
             jsonBuilder.append("\"student_id\":\"").append(finalStudentId).append("\"");
             jsonBuilder.append("}");
-            if (i < users.size() - 1) {
+            if (i < students.size() - 1) {
                 jsonBuilder.append(",\n");
             }
             else {
@@ -96,6 +95,7 @@ public class UserDAOJSON implements UserDAO {
             logger.log(Level.SEVERE, "JSON Serialization Engine: Unable to write to local data file storage", e);
         }
     }
+
     private String extractJsonValue(String block, String key) {
         String searchKey = "\"" + key + "\":\"";
         int startIndex = block.indexOf(searchKey);
@@ -111,48 +111,44 @@ public class UserDAOJSON implements UserDAO {
     }
 
     @Override
-    public User findUserByEmailAndPassword(String email, String password) throws WrongCredentialsException {
-        List<User> db = loadUsersFromFile();
+    public Student findStudentByEmailAndPassword(String email, String password) throws WrongCredentialsException {
+        List<Student> db = loadStudentsFromFile();
         for (int i = 0; i < db.size(); i++) {
-            User u = db.get(i);
-            if (u.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, u.getPassword())) {
-                return u;
+            Student s = db.get(i);
+            if ("STUDENT".equalsIgnoreCase(s.getRole()) && s.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, s.getPassword())) {
+                return s;
             }
         }
         throw new WrongCredentialsException();
     }
 
     @Override
-    public boolean saveUser(User user) throws EmailAlreadyInUseException {
-        if (user == null) {
-            return false;
+    public void saveStudent(Student student) throws EmailAlreadyInUseException {
+        if (student == null) {
+            return;
         }
-        List<User> db = loadUsersFromFile();
+        List<Student> db = loadStudentsFromFile();
         for (int i = 0; i < db.size(); i++) {
-            User u = db.get(i);
-            if (u.getEmail().equalsIgnoreCase(user.getEmail())) {
-                throw new EmailAlreadyInUseException(user.getEmail());
+            Student s = db.get(i);
+            if (s.getEmail().equalsIgnoreCase(student.getEmail())) {
+                throw new EmailAlreadyInUseException(student.getEmail());
             }
         }
-        if (!existsByEmail(user.getEmail())) {
-            String hashedPassword = PasswordHasher.hashPassword(user.getPassword());
+        if (!existsByEmail(student.getEmail())) {
+            String hashedPassword = PasswordHasher.hashPassword(student.getPassword());
 
-            User userToSave = new User(user.getEmail(), hashedPassword, user.getName(), user.getSurname(), user.getRole());
-            userToSave.setStudentId(user.getStudentId());
-
-            db.add(userToSave);
-            saveUsersToFile(db);
-            return true;
+            Student studentToSave = new Student(student.getEmail(), hashedPassword, student.getName(), student.getSurname(), student.getRole(), student.getStudentId());
+            db.add(studentToSave);
+            saveStudentsToFile(db);
         }
-        return false;
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        List<User> db = loadUsersFromFile();
+        List<Student> db = loadStudentsFromFile();
         for (int i = 0; i < db.size(); i++) {
-            User u = db.get(i);
-            if (u.getEmail().equalsIgnoreCase(email)) {
+            Student s = db.get(i);
+            if (s.getEmail().equalsIgnoreCase(email)) {
                 return true;
             }
         }

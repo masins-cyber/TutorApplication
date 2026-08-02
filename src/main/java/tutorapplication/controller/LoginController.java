@@ -2,34 +2,54 @@ package tutorapplication.controller;
 
 import tutorapplication.bean.LoginBean;
 import tutorapplication.bean.UserBean;
-import tutorapplication.dao.UserDAO;
+import tutorapplication.dao.StudentDAO;
+import tutorapplication.dao.TutorDAO;
 import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
+import tutorapplication.model.Student;
+import tutorapplication.model.Tutor;
 import tutorapplication.model.User;
 import tutorapplication.others.FactoryDAO;
 
 public class LoginController {
-    private final UserDAO userDAO;
+
+    private final StudentDAO studentDAO;
+    private final TutorDAO tutorDAO;
 
     public LoginController() {
-        this.userDAO = FactoryDAO.getUserDAO();
+        this.studentDAO = FactoryDAO.getStudentDAO();
+        this.tutorDAO = FactoryDAO.getTutorDAO();
     }
 
     public UserBean login(LoginBean loginBean) throws UserNotPresentException, WrongCredentialsException {
 
-        if (!userDAO.existsByEmail(loginBean.getEmail())) {
-            throw new UserNotPresentException(loginBean.getEmail());
-        }
-        User user = userDAO.findUserByEmailAndPassword(loginBean.getEmail(), loginBean.getPassword());
+        boolean isTutor = loginBean.isTutor();
+        User user;
 
-        if (user == null) {
-            throw new WrongCredentialsException();
+        if (isTutor) {
+            Tutor tutor = tutorDAO.findTutorByEmailAndPassword(loginBean.getEmail(), loginBean.getPassword());
+            if (tutor == null) {
+                throw new WrongCredentialsException();
+            }
+            user = tutor;
+        } else {
+            Student student = studentDAO.findStudentByEmailAndPassword(loginBean.getEmail(), loginBean.getPassword());
+            if (student == null) {
+                throw new WrongCredentialsException();
+            }
+            user = student;
         }
-        String exceptedRole = "STUDENT";
-        if (loginBean.isTutor()) {
-            exceptedRole = "TUTOR";
+
+        String expectedRole;
+
+        if (isTutor) {
+            expectedRole = "TUTOR";
         }
-        if (!user.getRole().equalsIgnoreCase(exceptedRole)) {
+        else {
+            expectedRole = "STUDENT";
+        }
+
+        if (!user.getRole().equalsIgnoreCase(expectedRole)) {
             throw new WrongCredentialsException();
         }
 
@@ -38,7 +58,10 @@ public class LoginController {
         authenticatedUserBean.setName(user.getName());
         authenticatedUserBean.setSurname(user.getSurname());
         authenticatedUserBean.setRole(user.getRole());
-        authenticatedUserBean.setStudentId(user.getStudentId());
+
+        if (user instanceof Student student) {
+            authenticatedUserBean.setStudentId(student.getStudentId());
+        }
 
         return authenticatedUserBean;
     }

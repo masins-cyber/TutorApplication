@@ -1,19 +1,22 @@
 package tutorapplication.controller;
 
 import tutorapplication.bean.UserBean;
-import tutorapplication.dao.UserDAO;
+import tutorapplication.dao.StudentDAO;
+import tutorapplication.dao.TutorDAO;
 import tutorapplication.exception.EmailAlreadyInUseException;
 import tutorapplication.exception.InvalidEmailException;
 import tutorapplication.model.Student;
 import tutorapplication.model.Tutor;
-import tutorapplication.model.User;
 import tutorapplication.others.FactoryDAO;
 
 public class RegistrationController {
-    private final UserDAO userDAO;
+
+    private final StudentDAO studentDAO;
+    private final TutorDAO tutorDAO;
 
     public RegistrationController() {
-        this.userDAO = FactoryDAO.getUserDAO();
+        this.studentDAO = FactoryDAO.getStudentDAO();
+        this.tutorDAO = FactoryDAO.getTutorDAO();
     }
 
     public boolean register(UserBean userBean) throws EmailAlreadyInUseException, InvalidEmailException {
@@ -22,18 +25,19 @@ public class RegistrationController {
             throw new InvalidEmailException(userBean.getEmail());
         }
 
-        if (userDAO.existsByEmail(userBean.getEmail())) {
+        if (studentDAO.existsByEmail(userBean.getEmail()) || tutorDAO.existsByEmail(userBean.getEmail())) {
             throw new EmailAlreadyInUseException(userBean.getEmail());
         }
 
-        User newUser;
         if ("STUDENT".equalsIgnoreCase(userBean.getRole())) {
-            newUser = new Student(userBean.getEmail(), userBean.getPassword(), userBean.getName(), userBean.getSurname(), userBean.getRole(), userBean.getStudentId());
+            Student newStudent = new Student(userBean.getEmail(), userBean.getPassword(), userBean.getName(), userBean.getSurname(), userBean.getRole(), userBean.getStudentId());
+            studentDAO.saveStudent(newStudent);
         }
         else {
-            newUser = new Tutor(userBean.getEmail(), userBean.getPassword(), userBean.getName(), userBean.getSurname(), userBean.getRole());
+            Tutor newTutor = new Tutor(userBean.getEmail(), userBean.getPassword(), userBean.getName(), userBean.getSurname(), userBean.getRole());
+            tutorDAO.saveTutor(newTutor);
         }
-        return userDAO.saveUser(newUser);
+        return true;
     }
 }
 

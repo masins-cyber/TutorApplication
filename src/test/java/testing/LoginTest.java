@@ -5,7 +5,6 @@ import tutorapplication.bean.UserBean;
 import tutorapplication.controller.LoginController;
 import tutorapplication.controller.RegistrationController;
 import tutorapplication.exception.EmailAlreadyInUseException;
-import tutorapplication.exception.UserNotPresentException;
 import tutorapplication.exception.WrongCredentialsException;
 import tutorapplication.others.Config;
 
@@ -40,6 +39,19 @@ class LoginTest {
     }
 
     @Test
+    void testLoginNonExistentUser() {
+        LoginBean loginBean = new LoginBean();
+        loginBean.setEmail("noexistaccount@test.it");
+        loginBean.setPassword("whatever");
+        loginBean.setTutor(false);
+
+        assertThrows(WrongCredentialsException.class, () -> loginController.login(loginBean),
+                "The system should throw WrongCredentialsException for non-existent accounts.");
+
+        Print.println("User Not Present Test: OK (WrongCredentialsException successfully thrown)");
+    }
+
+    @Test
     void testLoginWrongCredentials() {
         LoginBean loginBean = new LoginBean();
         loginBean.setEmail("simix@gmail.com");
@@ -49,18 +61,6 @@ class LoginTest {
         assertThrows(WrongCredentialsException.class, () -> loginController.login(loginBean), "The controller had to block access because the declared role does not match the DB.");
 
         Print.println("Wrong Credentials Test: OK (WrongCredentialsException successfully thrown)");
-    }
-
-    @Test
-    void testLoginUserNotPresent() {
-        LoginBean loginBean = new LoginBean();
-        loginBean.setEmail("noexistaccount@test.it");
-        loginBean.setPassword("whatever");
-        loginBean.setTutor(false);
-
-        assertThrows(UserNotPresentException.class, () -> loginController.login(loginBean), "The system should have thrown UserNotPresentException for an unregistered email.");
-
-        Print.println("User Not Present Test: OK (UserNotPresentException successfully thrown)");
     }
 
     @Test
@@ -81,6 +81,25 @@ class LoginTest {
     }
 
     @Test
+    void testRegistrationStudentFlow() {
+        RegistrationController registration = new RegistrationController();
+
+        String randomEmail = "student_" + System.currentTimeMillis() + "@test.it";
+
+        UserBean student = new UserBean();
+        student.setEmail(randomEmail);
+        student.setPassword("student123");
+        student.setName("Lando");
+        student.setSurname("Norris");
+        student.setRole("STUDENT");
+        student.setStudentId("0399887");
+
+        assertDoesNotThrow(() -> registration.register(student), "Registration of a new student should be successful");
+
+        Print.println("Student Registration Test: OK for " + randomEmail);
+    }
+
+    @Test
     void testRegistrationTutorFlow() {
         RegistrationController registration = new RegistrationController();
 
@@ -93,8 +112,8 @@ class LoginTest {
         tutor.setSurname("James");
         tutor.setRole("TUTOR");
 
-        assertDoesNotThrow(() -> registration.register(tutor), "Registration of a new instructor should be successful");
+        assertDoesNotThrow(() -> registration.register(tutor), "Registration of a new tutor should be successful");
 
-        Print.println("Instructor Registration Test: OK for " + randomEmail);
+        Print.println("Tutor Registration Test: OK for " + randomEmail);
     }
 }
