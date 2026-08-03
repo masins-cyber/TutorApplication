@@ -16,7 +16,7 @@ public class TutorDAOInMemory implements TutorDAO {
     public Tutor findTutorByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         for (int i = 0; i < tutorsTable.size(); i++) {
             Tutor t = tutorsTable.get(i);
-            if ("TUTOR".equalsIgnoreCase(t.getRole()) && t.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, t.getPassword())) {
+            if (t.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, t.getPassword())) {
                 return t;
             }
         }

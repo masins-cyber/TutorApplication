@@ -16,7 +16,7 @@ public class StudentDAOInMemory implements StudentDAO {
     public Student findStudentByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         for (int i = 0; i < studentsTable.size(); i++) {
             Student s = studentsTable.get(i);
-            if ("STUDENT".equalsIgnoreCase(s.getRole()) && s.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, s.getPassword())) {
+            if (s.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, s.getPassword())) {
                 return s;
             }
         }

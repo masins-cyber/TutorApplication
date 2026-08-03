@@ -115,7 +115,7 @@ public class StudentDAOJSON implements StudentDAO {
         List<Student> db = loadStudentsFromFile();
         for (int i = 0; i < db.size(); i++) {
             Student s = db.get(i);
-            if ("STUDENT".equalsIgnoreCase(s.getRole()) && s.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, s.getPassword())) {
+            if (s.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, s.getPassword())) {
                 return s;
             }
         }

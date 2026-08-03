@@ -106,7 +106,7 @@ public class TutorDAOJSON implements TutorDAO {
         List<Tutor> db = loadTutorsFromFile();
         for (int i = 0; i < db.size(); i++) {
             Tutor t = db.get(i);
-            if ("TUTOR".equalsIgnoreCase(t.getRole()) && t.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, t.getPassword())) {
+            if (t.getEmail().equalsIgnoreCase(email) && PasswordHasher.checkPassword(password, t.getPassword())) {
                 return t;
             }
         }
