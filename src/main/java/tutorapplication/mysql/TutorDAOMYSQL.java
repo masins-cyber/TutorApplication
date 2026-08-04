@@ -6,8 +6,8 @@ import tutorapplication.exception.WrongCredentialsException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import tutorapplication.model.Tutor;
-import tutorapplication.others.Connect;
 import tutorapplication.others.PasswordHasher;
+import tutorapplication.others.QueryHelper;
 
 import java.sql.*;
 
@@ -19,23 +19,28 @@ public class TutorDAOMYSQL implements TutorDAO {
     @Override
     public Tutor findTutorByEmailAndPassword(String email, String password) throws WrongCredentialsException {
         String query = "SELECT email, password, name, surname, role FROM users WHERE email = ? AND role = 'TUTOR'";
-        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
+        try {
+            Tutor tutor = QueryHelper.executeQuery(query, stmt -> stmt.setString(1, email), rs -> {
+                        if (rs.next()) {
+                            String hashedPasswordFromDB = rs.getString(COLUMN_PASSWORD);
+                            if (PasswordHasher.checkPassword(password, hashedPasswordFromDB)) {
+                                return new Tutor(rs.getString("email"), rs.getString(COLUMN_PASSWORD), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
+                            }
+                        }
+                        return null;
+                    }
+            );
 
-            if (rs.next()) {
-                String hashedPasswordFromDB = rs.getString(COLUMN_PASSWORD);
-
-                if (PasswordHasher.checkPassword(password, hashedPasswordFromDB)) {
-                    return new Tutor(rs.getString("email"), rs.getString(COLUMN_PASSWORD), rs.getString("name"), rs.getString("surname"), rs.getString("role"));
-                }
+            if (tutor != null) {
+                return tutor;
             }
             throw new WrongCredentialsException();
+
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Database error during tutor login authentication", e);
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -49,17 +54,17 @@ public class TutorDAOMYSQL implements TutorDAO {
         }
 
         String query = "INSERT INTO users (email, password, name, surname, role, student_id) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, tutor.getEmail());
-            String encryptedPassword = PasswordHasher.hashPassword(tutor.getPassword());
-            stmt.setString(2, encryptedPassword);
-            stmt.setString(3, tutor.getName());
-            stmt.setString(4, tutor.getSurname());
-            stmt.setString(5, tutor.getRole());
-            stmt.setNull(6, Types.VARCHAR);
-
-            stmt.executeUpdate();
+        try {
+            QueryHelper.executeUpdate(query, stmt -> {
+                        stmt.setString(1, tutor.getEmail());
+                        String encryptedPassword = PasswordHasher.hashPassword(tutor.getPassword());
+                        stmt.setString(2, encryptedPassword);
+                        stmt.setString(3, tutor.getName());
+                        stmt.setString(4, tutor.getSurname());
+                        stmt.setString(5, tutor.getRole());
+                        stmt.setNull(6, Types.VARCHAR);
+                    }
+            );
         }
         catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
@@ -72,9 +77,9 @@ public class TutorDAOMYSQL implements TutorDAO {
     @Override
     public boolean existsByEmail(String email) {
         String query = "SELECT 1 FROM users WHERE email = ?";
-        try (Connection conn = Connect.getInstance().getDBConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, email);
-            return stmt.executeQuery().next();
+        try {
+            Boolean exists = QueryHelper.executeQuery(query, stmt -> stmt.setString(1, email), ResultSet::next);
+            return Boolean.TRUE.equals(exists);
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Database connection error during unique email validation check", e);
