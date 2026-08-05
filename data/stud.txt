@@ -1,4 +1,5 @@
 [
   {"email":"masini20@gmail.com","password":"$2a$10$AMVJR7CWOGNSuACvfHvKx.e0cEi0Og43Q5bgI/6J9ql.h9RiIxA82","name":"Matteo","surname":"Masini","role":"STUDENT","student_id":"0310935"},
-  {"email":"maso10@gmail.com","password":"$2a$10$nCrLAJw1g9kAC2X1JEP7demWADyNypgvNvmOfhW9iXQj/QoS9BcEi","name":"Matteo","surname":"Masini","role":"STUDENT","student_id":"0310935"}
+  {"email":"maso10@gmail.com","password":"$2a$10$nCrLAJw1g9kAC2X1JEP7demWADyNypgvNvmOfhW9iXQj/QoS9BcEi","name":"Matteo","surname":"Masini","role":"STUDENT","student_id":"0310935"},
+  {"email":"dad1@gmail.com","password":"$2a$10$nbhz2N73B/5UtN.E7cJHme7T3vQ2saujt4cg1g8MXtaxEdteJahMu","name":"DAD1","surname":"dad1","role":"STUDENT","student_id":"0310936"}
 ]
